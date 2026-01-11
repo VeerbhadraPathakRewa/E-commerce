@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap link -->
+    <link rel="stylesheet" href="../common/css/bootstrap.min.css">
+    <script src="../common/js/bootstrap.bundle.min.js"></script>
+    <!-- sweetalert link -->
+    <script src="../common/js/sweetalert.min.js"></script>
+    <!-- Animate link  -->
+    <link rel="stylesheet" href="../common/css/animate.min.css">
+    <!-- Fontawesome link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- link for custome CSS  -->
+    <link rel="stylesheet" href="../employee/css/employee.css">
+    <title>Employee Panel</title>
+</head>
+<body>
+    <div class="contaner-fluid p-0 overflow-hidden">
+        <div class="side-nav side-nav-open">
+
+            <button class="bg-transparent border-0 collapse-btn text-white fw-bold w-100" style="font-size: 20px ;">
+                <i class=" fa fa-shopping-cart float-start mt-2"></i>
+                Stock Update
+                <i class=" fa fa-angle-down float-end mt-2"></i>
+            </button>
+            <ul class="collapse">
+                <li access-link="dynamic/cat_designe.html"
+                    class="active collapse-item list-group-item border-0 border-start text-white bg-transparent">
+                    Create Category
+                </li>
+                <li access-link="dynamic/brand_designe.html"
+                    class="collapse-item list-group-item border-0 border-start text-white bg-transparent">
+                    Create Brandss
+                </li>
+                <li access-link="dynamic/cat_designe.html"
+                    class="collapse-item list-group-item border-0 border-start text-white bg-transparent">
+                    Create Product
+                </li>
+            </ul>
+        </div>
+        <!-- nav min,max button -->
+        <nav class="navbar bg-white">
+            <button class="btn toggler-btn">
+                <i class="fa fa-align-left"></i>
+            </button>
+        </nav>
+        <div class="page page-open">
+        </div>
+    </div>
+    <!-- Custom Script Coding -->
+    <script src="../employee/js/employee.js"></script>
+    <script>
+        const togglerFunc = () => {
+            let togglerBtn = document.querySelector(".toggler-btn");
+            let sideNav = document.querySelector(".side-nav");
+            let page = document.querySelector(".page");
+            togglerBtn.onclick = () => {
+                let open = sideNav.classList.contains("side-nav-open");
+                if (open == true) {
+                    sideNav.classList.remove("side-nav-open");
+                    sideNav.classList.add("side-nav-close");
+                    page.classList.remove("page-open");
+                    page.classList.add("page-close");
+                }
+                else {
+                    sideNav.classList.add("side-nav-open");
+                    sideNav.classList.remove("side-nav-close");
+                    page.classList.add("page-open");
+                    page.classList.remove("page-close");
+                }
+            }
+        }
+        togglerFunc();
+    </script>
+</body>
+
+</html>
