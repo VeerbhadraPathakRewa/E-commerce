@@ -48,12 +48,16 @@ const dynamicAjaxFunc = (link) => {
         if (link == "dynamic/cat_designe.html") {
             createCategoryFunc();
         }
-        if (link == "dynamic/brand_designe.html") {
-            crateBrandFunc();
+        if(link == "dynamic/brand_designe.html")
+            {
+                createBrandFunc();
+            }
+        
+
         }
 
     }
-}
+
 //Start Create Category coding
 const createCategoryFunc = () => {
     let categoryList = document.querySelector(".category-list");
@@ -146,7 +150,21 @@ const createCategoryFunc = () => {
     }
     readcategorydata();
 }
+
 // Start Create Brand coding 
-const crateBrandFunc = () => {
-    alert();
+const createBrandFunc = () => {
+    let allcategoryData =[];
+    if(localStorage.getItem("allcategoryData")!=null){
+        allcategoryData=JSON.parse(localStorage.getItem("allcategoryData"));
+    }
+    let brandForm = document.querySelector(".brand-form");
+    let barandSelect = brandForm.querySelector("select");
+    let catSelectList =document.querySelector(".cat-list-select")
+    for (let data of allcategoryData)
+    {
+        barandSelect.innerHTML +=` <option>${data.category}</option>`;
+        catSelectList.innerHTML +=` <option>${data.category}</option>`;
+    }
+
+
 }
