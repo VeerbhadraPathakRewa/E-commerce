@@ -14,9 +14,15 @@
             <select class="form-select mb-3  ">
                 <option value="choose category">Chosse Category</option>
             </select>
-            <input type="text" placeholder="Category" class="mb-3 form-control">
-            <button class="btn btn-primary">
-                <i class="fa fa-add"></i>Add Fieslds
+            <input type="text" placeholder="Brand" class="mb-3 form-control">
+            <div class="input-box">
+                <div>
+                    <i class="fa fa-trash mb-2 float-end"></i>
+                    <input type="text" class="form-control mb-3" placeholder="Brand">
+                </div>
+            </div>
+            <button class="btn btn-primary" type="button">
+                <i class="fa fa-add"></i>Add Fields
             </button>
             <button class="btn btn-danger">Create</button>
         </form>
@@ -37,16 +43,8 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mobiles</td>
-                    <td>Nokia</td>
-                    <td>
-                        <button class="btn btn-primary px-2 "><i class=" fa fa-edit "></i></button>
-                        <button class="btn btn-danger px-2 "><i class=" fa fa-trash "></i></button>
-                    </td>
-                </tr>
+            <tbody class="brand-list">
+                
             </tbody>
         </table>
     </div>
