@@ -3,9 +3,13 @@ window.onload = () => {
     DynamicRequestFunc();
     setTimeout(() => {
         togglerFunc();
-
     }, 100);
 }
+//Globle Variables
+  let allcategoryData = [];
+  let dy_Link ="";
+
+
 
 
 //Start Collaps Codding
@@ -21,7 +25,6 @@ const DynamicRequestFunc = () => {
     let activeEl = document.querySelector(".active");
     let activeLink = activeEl.getAttribute("access-link");
     dynamicAjaxFunc(activeLink);
-
     let allCollapsBtn = document.querySelectorAll(".collapse-item");
     for (let el of allCollapsBtn) {
         el.onclick = (e) => {
@@ -34,13 +37,12 @@ const DynamicRequestFunc = () => {
         }
     }
 }
-
 const dynamicAjaxFunc = (link) => {
+    dy_Link=link
     let page = document.querySelector(".page");
     let ajax = new XMLHttpRequest();
     ajax.open("GET", link, true);
     ajax.send();
-
     // get resopnse
     ajax.onload = () => {
         let resoponse = ajax.response;
@@ -48,26 +50,21 @@ const dynamicAjaxFunc = (link) => {
         if (link == "dynamic/cat_designe.html") {
             createCategoryFunc();
         }
-        if(link == "dynamic/brand_designe.html")
-            {
-                createBrandFunc();
-            }
-        
-
+        if (link == "dynamic/brand_designe.html") {
+            createBrandFunc();
         }
-
     }
-
+}
 //Start Create Category coding
 const createCategoryFunc = () => {
-    let categoryList = document.querySelector(".category-list");
+    allcategoryData = getAllData("allcategoryData")
+    console.log(allcategoryData)
     let categoryForm = document.querySelector(".category-form");
     let inputBoxEl = document.querySelector(".input-box");
     let addFieldBtn = document.querySelector(".add-field-btn");
-    let allcategoryData = [];
-    if (localStorage.getItem("allcategoryData") !== null) {
-        allcategoryData = JSON.parse(localStorage.getItem("allcategoryData"));
-    }
+    // if (localStorage.getItem("allcategoryData") !== null) {
+    //     allcategoryData = JSON.parse(localStorage.getItem("allcategoryData"));
+    // }
     //start add field
     addFieldBtn.onclick = () => {
         inputBoxEl.innerHTML += ` <div>
@@ -90,14 +87,18 @@ const createCategoryFunc = () => {
                 category: input.value
             });
         }
-        localStorage.setItem("allcategoryData", JSON.stringify(allcategoryData));
-        swal("Success", "Your Category creation is Done!", "success");
+        insertData("allcategoryData", JSON.stringify(allcategoryData));
+        insertMsg();
         readcategorydata();
         categoryForm.reset('');
 
     }
-    //Create category data
-    const readcategorydata = () => {
+  
+    readcategorydata();
+}
+  //Read category data
+    const readcategorydata = () => {        
+    let categoryList = document.querySelector(".category-list");
         categoryList.innerHTML = "";
         allcategoryData.forEach((data, index) => {
             categoryList.innerHTML += `<tr index="${index}">
@@ -118,8 +119,9 @@ const createCategoryFunc = () => {
                 let parent = btn.parentElement.parentElement;
                 let index = parent.getAttribute("index");
                 allcategoryData.splice(index, 1);
-                localStorage.setItem("allcategoryData", JSON.stringify(allcategoryData));
-                readcategorydata();
+                deleteAndUpdateFunc("allcategoryData", JSON.stringify(allcategoryData),dy_Link, "Deleted");              
+                
+                 
             }
         }
         //Category Edit Codding
@@ -141,30 +143,22 @@ const createCategoryFunc = () => {
                     allcategoryData[index] = {
                         category: category
                     }
-                    localStorage.setItem("allcategoryData", JSON.stringify(allcategoryData));
-                    readcategorydata();
-                    allTD[1].contentEditable = false;
+                    deleteAndUpdateFunc("allcategoryData",JSON.stringify(allcategoryData),dy_Link,"Updated");
                 }
             }
         }
     }
-    readcategorydata();
-}
-
 // Start Create Brand coding 
 const createBrandFunc = () => {
-    let allcategoryData =[];
-    if(localStorage.getItem("allcategoryData")!=null){
-        allcategoryData=JSON.parse(localStorage.getItem("allcategoryData"));
+    let allcategoryData = [];
+    if (localStorage.getItem("allcategoryData") != null) {
+        allcategoryData = JSON.parse(localStorage.getItem("allcategoryData"));
     }
     let brandForm = document.querySelector(".brand-form");
     let barandSelect = brandForm.querySelector("select");
-    let catSelectList =document.querySelector(".cat-list-select")
-    for (let data of allcategoryData)
-    {
-        barandSelect.innerHTML +=` <option>${data.category}</option>`;
-        catSelectList.innerHTML +=` <option>${data.category}</option>`;
+    let catSelectList = document.querySelector(".cat-list-select")
+    for (let data of allcategoryData) {
+        barandSelect.innerHTML += ` <option>${data.category}</option>`;
+        catSelectList.innerHTML += ` <option>${data.category}</option>`;
     }
-
-
 }

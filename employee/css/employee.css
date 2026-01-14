@@ -1,7 +1,7 @@
 * {
     padding: 0;
     margin: 0;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 }
 .side-nav {
     
@@ -26,8 +26,7 @@
 }
 .page-open {
     width: 84%;
-    margin-left: 16%;
-    
+    margin-left: 16%;    
 }
 .page-close {
     width: 100%;
