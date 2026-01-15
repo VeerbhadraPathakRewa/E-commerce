@@ -199,24 +199,43 @@ const createBrandFunc = () => {
     }
     //get brand Data
     catSelectList.onchange = () => {
-        brandList.innerHTML ="";
+        let id = 0;
+        let filterBrand =[];
+        brandList.innerHTML = "";
         if (catSelectList.value != "choose category") {
-            let filterBrand = allBrandData.filter((data) => {
-                return data.category == catSelectList.value
-            });
-            let index =0;
-            for (let brand of filterBrand) {
-                brandList.innerHTML += `<tr>
-                    <td>${index+1}</td>
-                    <td>${brand.category}</td>
-                    <td>${brand.brand}</td>
-                    <td>
-                        <button class="btn btn-primary px-2 "><i class=" fa fa-edit "></i></button>
-                        <button class="btn btn-danger px-2 "><i class=" fa fa-trash "></i></button>
-                    </td>
-                </tr>`;
-                index ++;
+        
+            for(let brand of allBrandData){
+                if(brand.category== catSelectList.value){
+                    brand["id"] =id
+                    filterBrand.push(brand)
+                }
+                id ++;
             }
+            console.log(filterBrand);
+
+            // let index = 0;
+            // for (let brand of filterBrand) {
+            //     brandList.innerHTML += `<tr index ="${index}">
+            //         <td>${index + 1}</td>
+            //         <td>${brand.category}</td>
+            //         <td>${brand.brand}</td>
+            //         <td>
+            //             <button class="btn btn-primary edit-btn px-2 "><i class=" fa fa-edit "></i></button>
+            //             <button class="btn btn-danger del-btn px-2 "><i class=" fa fa-trash "></i></button>
+            //         </td>
+            //     </tr>`;
+            //     index++;
+            // }
+
+        //start delete brand coding
+        let allDelBtn =brandList.querySelectorAll(".del-btn");
+        for(let btn of allDelBtn){
+            btn.onclick =()=>{
+                let parent = btn.parentElement.parentElement;
+                let index =parent.getAttribute("index");
+                alert(index)
+            }
+        }
         }
         else {
             swal("Select Category", "Please select category First", "waring");
