@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,8 +19,9 @@
     <link rel="stylesheet" href="../employee/css/employee.css">
     <title>Employee Panel</title>
 </head>
+
 <body>
-    <div class="contaner-fluid p-0 overflow-hidden">
+    <div class="contaner-fluid">
         <div class="side-nav side-nav-open">
             <button class="bg-transparent border-0 collapse-btn text-white fw-bold w-100" style="font-size: 20px ;">
                 <i class=" fa fa-shopping-cart float-start mt-2"></i>
@@ -35,23 +37,27 @@
                     class=" active collapse-item list-group-item border-0 border-start text-white bg-transparent">
                     Create Brandss
                 </li>
-                <li access-link="dynamic/cat_designe.html"
+                <li access-link="dynamic/product_designe.html"
                     class="collapse-item list-group-item border-0 border-start text-white bg-transparent">
                     Create Product
                 </li>
             </ul>
         </div>
-        <!-- nav min,max button -->
-        <nav class="navbar bg-white">            
-            <button class="btn toggler-btn">
-                <i class="fa fa-align-left"></i>
-            </button>
-        </nav>
-        <div class="page page-open">
-        </div>
     </div>
+    <!-- nav min,max button -->
+    <nav class="navbar bg-white">
+        <button class="btn toggler-btn">
+            <i class="fa fa-align-left"></i>
+        </button>
+    </nav>
+    <div class="page page-open">
+
+        
+
+    </div>
+
+
     <!-- Custom Script Coding -->
-    <script src="../employee/js/employee.js"></script>
     <script>
         const togglerFunc = () => {
             let togglerBtn = document.querySelector(".toggler-btn");
@@ -75,6 +81,7 @@
         }
         togglerFunc();
     </script>
+    <script src="../employee/js/employee.js"></script>
     <script src="../common/js/common.js"></script>
 </body>
 

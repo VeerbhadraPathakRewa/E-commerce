@@ -153,7 +153,6 @@ const readcategorydata = () => {
 const createBrandFunc = () => {
     allcategoryData = getAllData("allcategoryData");
     allBrandData = getAllData("allBrandData");
-    let brandList = document.querySelector(".brand-list");
     let brandForm = document.querySelector(".brand-form");
     let inputBox = brandForm.querySelector(".input-box");
     let allBtn = brandForm.querySelectorAll("button");
@@ -200,47 +199,86 @@ const createBrandFunc = () => {
     //get brand Data
     catSelectList.onchange = () => {
         let id = 0;
-        let filterBrand =[];
-        brandList.innerHTML = "";
+        let filterBrand = [];
         if (catSelectList.value != "choose category") {
-        
-            for(let brand of allBrandData){
-                if(brand.category== catSelectList.value){
-                    brand["id"] =id
-                    filterBrand.push(brand)
+            for (let brand of allBrandData) {
+                if (brand.category == catSelectList.value) {
+                    brand["id"] = id;
+                    filterBrand.push(brand);
                 }
-                id ++;
+                id++;
             }
-            console.log(filterBrand);
+            readBrandFunc(filterBrand);
 
-            // let index = 0;
-            // for (let brand of filterBrand) {
-            //     brandList.innerHTML += `<tr index ="${index}">
-            //         <td>${index + 1}</td>
-            //         <td>${brand.category}</td>
-            //         <td>${brand.brand}</td>
-            //         <td>
-            //             <button class="btn btn-primary edit-btn px-2 "><i class=" fa fa-edit "></i></button>
-            //             <button class="btn btn-danger del-btn px-2 "><i class=" fa fa-trash "></i></button>
-            //         </td>
-            //     </tr>`;
-            //     index++;
-            // }
 
-        //start delete brand coding
-        let allDelBtn =brandList.querySelectorAll(".del-btn");
-        for(let btn of allDelBtn){
-            btn.onclick =()=>{
-                let parent = btn.parentElement.parentElement;
-                let index =parent.getAttribute("index");
-                alert(index)
-            }
-        }
         }
         else {
             swal("Select Category", "Please select category First", "waring");
 
         }
 
+    }
+}
+const readBrandFunc = (filterBrand) => {
+    let index = 0;
+    let brandList = document.querySelector(".brand-list");
+    brandList.innerHTML = "";
+
+    for (let brand of filterBrand) {
+        brandList.innerHTML += `<tr id ="${brand.id}" index ="${index}">
+                    <td>${index + 1}</td>
+                    <td>${brand.category}</td>
+                    <td>${brand.brand}</td>
+                    <td>
+                        <button class="btn btn-primary edit-btn px-2 "><i class=" fa fa-edit ">Edit</i></button>
+                        <button class="btn btn-primary save-btn d-none px-2 "><i class=" fa fa-save ">save</i></button>
+                        <button class="btn btn-danger del-btn px-2 "><i class=" fa fa-trash "></i></button>
+                    </td>
+                </tr>`;
+        index++;
+    }
+
+    //start delete brand coding
+    let allDelBtn = brandList.querySelectorAll(".del-btn");
+    for (let btn of allDelBtn) {
+        btn.onclick = () => {
+            let parent = btn.parentElement.parentElement;
+            let index = parent.getAttribute("index");
+            let id = parent.getAttribute("id");
+            allBrandData.splice(id, 1);
+            filterBrand.splice(index, 1);
+            deleteAndUpdateFunc("allBrandData", JSON.stringify(allBrandData), dy_Link, "Deleted", filterBrand);
+
+        }
+    }
+
+    //Start update brand coding
+    let allEditBtn = brandList.querySelectorAll(".edit-btn");
+    for (let btn of allEditBtn) {
+        btn.onclick = () => {
+            let parent = btn.parentElement.parentElement;
+            let id = parent.getAttribute("id");
+            let index = parent.getAttribute("index")
+            let allTd = parent.querySelectorAll("td");
+            let saveBtn = parent.querySelector(".save-btn");
+            allTd[2].contentEditable = true;
+            allTd[2].focus();
+            btn.classList.add("d-none");
+            saveBtn.classList.remove("d-none");
+            saveBtn.onclick = () => {
+                let category = allTd[1].innerHTML;
+                let brand = allTd[2].innerHTML
+                allBrandData[id] = {
+                    category: category,
+                    brand: brand
+                }
+                filterBrand[index] = {
+                    category: category,
+                    brand: brand,
+                    id: id
+                }
+                deleteAndUpdateFunc("allBrandData", JSON.stringify(allBrandData), dy_Link, "Updated", filterBrand)
+            }
+        }
     }
 }

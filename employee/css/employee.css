@@ -3,8 +3,9 @@
     margin: 0;
     /* box-sizing: border-box; */
 }
+
 .side-nav {
-    
+
     height: 100vh;
     background-color: blueviolet;
     position: fixed;
@@ -12,35 +13,44 @@
     left: 0;
     transition: 0.3s ease;
 }
+
 .side-nav-open {
     width: 16%;
 }
+
 .side-nav-close {
     width: 0%;
     opacity: 0;
 }
+
 .page {
-    height: 100vh;
+    height: auto;
     background-color: #c7a9a9;
     transition: 0.3s ease;
 }
+
 .page-open {
     width: 84%;
-    margin-left: 16%;    
+    margin-left: 16%;
 }
+
 .page-close {
     width: 100%;
     margin-left: 0%;
 }
+
 button {
     box-shadow: none !important;
 }
+
 /* Side menubar style */
-.side-nav ul li:hover,.side-nav ul li.active{
+.side-nav ul li:hover,
+.side-nav ul li.active {
     border: 1px solid white !important;
     cursor: pointer;
 }
-.navbar{
+
+.navbar {
     z-index: 1000 !important;
     /* background-color: blue !important; */
 }

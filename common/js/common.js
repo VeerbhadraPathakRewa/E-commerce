@@ -14,7 +14,7 @@ const getAllData = (table_name) => {
 const insertMsg = () => {
     swal("Success", "Your Data Inserted!", "success");
 }
-const deleteAndUpdateFunc = (table_name, data, link, massage) => {
+const deleteAndUpdateFunc = (table_name, data, link, massage, filterData) => {
     swal({
         title: "Once Change, you will not be able to recover",
         text: "warning",
@@ -25,11 +25,13 @@ const deleteAndUpdateFunc = (table_name, data, link, massage) => {
         .then((willDelete) => {
             if (willDelete) {
                 insertData(table_name, data);
-                if (link == "dynamic/cat_designe.html")
-                {
+                if (link == "dynamic/cat_designe.html") {
                     readcategorydata();
                 }
-                swal("Success! Your  Imaginary file has been "+massage+"!",
+                else if (link == "dynamic/brand_designe.html") {
+                    readBrandFunc(filterData);
+                }
+                swal("Success! Your  Imaginary file has been " + massage + "!",
                     {
                         icon: "success",
                     });
