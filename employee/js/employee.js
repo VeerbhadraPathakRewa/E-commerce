@@ -8,8 +8,13 @@ window.onload = () => {
 //Globle Variables
 let allcategoryData = [];
 let allBrandData = [];
+let allProductData = [];
 let dy_Link = "";
-
+let thumb = "";
+let front = "";
+let back = "";
+let right = "";
+let left = "";
 
 
 
@@ -38,6 +43,7 @@ const DynamicRequestFunc = () => {
         }
     }
 }
+//Ajax Request coding
 const dynamicAjaxFunc = (link) => {
     dy_Link = link
     let page = document.querySelector(".page");
@@ -53,6 +59,9 @@ const dynamicAjaxFunc = (link) => {
         }
         if (link == "dynamic/brand_designe.html") {
             createBrandFunc();
+        }
+        if (link == "dynamic/product_designe.html") {
+            createProductFunc();
         }
     }
 }
@@ -106,9 +115,9 @@ const readcategorydata = () => {
                     <td>${index + 1}</td>
                     <td>${data.category}</td>
                     <td>
-                        <button class="btn btn-primary px-2 edit-btn "><i class=" fa fa-edit">Edit</i></button>
-                        <button class=" d-none btn btn-primary px-2 save-btn "><i class=" fa fa-save ">save</i></button>
-                        <button class="btn btn-danger px-2 del-btn "><i class=" fa fa-trash ">Delete</i></button>
+                        <button class="btn btn-primary px-2 edit-btn "><i class=" fa fa-edit"> </i></button>
+                        <button class=" d-none btn btn-primary px-2 save-btn "><i class=" fa fa-save "> </i></button>
+                        <button class="btn btn-danger px-2 del-btn "><i class=" fa fa-trash "> </i></button>
                     </td>
                 </tr>`;
     });
@@ -219,6 +228,7 @@ const createBrandFunc = () => {
 
     }
 }
+//Read Brand coding
 const readBrandFunc = (filterBrand) => {
     let index = 0;
     let brandList = document.querySelector(".brand-list");
@@ -280,5 +290,88 @@ const readBrandFunc = (filterBrand) => {
                 deleteAndUpdateFunc("allBrandData", JSON.stringify(allBrandData), dy_Link, "Updated", filterBrand)
             }
         }
+    }
+}
+//Start Create Product coding
+const createProductFunc = () => {
+    allcategoryData = getAllData("allcategoryData")
+    allBrandData = getAllData("allBrandData")
+    let productForm = document.querySelector(".product-form");
+    let catListSelect = document.querySelector(".category-list-select");
+    let brandListSelect = document.querySelector(".brand-list-select");
+    let allSelect = productForm.querySelectorAll("select");
+    let allInput = productForm.querySelectorAll("input");
+    //Read Category for Form
+    for (let category of allcategoryData) {
+        allSelect[0].innerHTML += `
+        <option>${category.category}</option><br> 
+        `;
+        catListSelect.innerHTML += `
+        <option>${category.category}</option>
+        `;
+    }
+    //Read Brand for Form
+    allSelect[0].onchange = () => {
+        allSelect[1].innerHTML = ' <option value="choose category">Choose Category</option>';
+        if (allSelect[0].value != "choose category") {
+            let fileterBrand = allBrandData.filter((brand) => brand.category == allSelect[0].value)
+            for (let brand of fileterBrand) {
+                allSelect[1].innerHTML += `<option>${brand.brand}</option>`;
+            }
+        }
+        else {
+            swal("Choose Category!", "Please Select Category First", "warning");
+        }
+
+    }
+    //Read brand for List
+    catListSelect.onchange = () => {
+        brandListSelect.innerHTML = ' <option value="choose category">Choose Category</option>';
+        if (catListSelect.value != "choose category") {
+            let fileterBrand = allBrandData.filter((brand) => brand.category == catListSelect.value)
+            for (let brand of fileterBrand) {
+                brandListSelect.innerHTML += `<option>${brand.brand}</option>`;
+            }
+        }
+        else {
+            swal("Choose Category!", "Please Select Category First", "warning");
+        }
+    }
+    //Read Image Binary
+    let fReader = new FileReader();
+    //Read thumb
+    allInput[3].onchange = () => {
+        fReader.onload = (e) => {
+            thumb = e.target.result;
+        }
+        fReader.readAsDataURL(allInput[3].files[0]);
+    }
+    //Read front
+    allInput[4].onchange = () => {
+        fReader.onload = (e) => {
+            front = e.target.result;
+        }
+        fReader.readAsDataURL(allInput[4].files[0]);
+    }
+    //Read back
+    allInput[5].onchange = () => {
+        fReader.onload = (e) => {
+            back = e.target.result;
+        }
+        fReader.readAsDataURL(allInput[5].files[0]);
+    }
+    //Read right
+    allInput[6].onchange = () => {
+        fReader.onload = (e) => {
+            right = e.target.result;
+        }
+        fReader.readAsDataURL(allInput[6].files[0]);
+    }
+    //Read left
+    allInput[7].onchange = () => {
+        fReader.onload = (e) => {
+            left = e.target.result;
+        }
+        fReader.readAsDataURL(allInput[7].files[0]);
     }
 }
