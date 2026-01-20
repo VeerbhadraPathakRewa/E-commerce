@@ -72,9 +72,6 @@ const createCategoryFunc = () => {
     let categoryForm = document.querySelector(".category-form");
     let inputBoxEl = document.querySelector(".input-box");
     let addFieldBtn = document.querySelector(".add-field-btn");
-    // if (localStorage.getItem("allcategoryData") !== null) {
-    //     allcategoryData = JSON.parse(localStorage.getItem("allcategoryData"));
-    // }
     //start add field
     addFieldBtn.onclick = () => {
         inputBoxEl.innerHTML += ` <div>
@@ -294,13 +291,15 @@ const readBrandFunc = (filterBrand) => {
 }
 //Start Create Product coding
 const createProductFunc = () => {
-    allcategoryData = getAllData("allcategoryData")
-    allBrandData = getAllData("allBrandData")
+    allcategoryData = getAllData("allcategoryData");
+    allBrandData = getAllData("allBrandData");
+    allProductData = getAllData("allProductData");
     let productForm = document.querySelector(".product-form");
     let catListSelect = document.querySelector(".category-list-select");
     let brandListSelect = document.querySelector(".brand-list-select");
     let allSelect = productForm.querySelectorAll("select");
     let allInput = productForm.querySelectorAll("input");
+    let textareaEl = productForm.querySelector("textarea");
     //Read Category for Form
     for (let category of allcategoryData) {
         allSelect[0].innerHTML += `
@@ -312,7 +311,7 @@ const createProductFunc = () => {
     }
     //Read Brand for Form
     allSelect[0].onchange = () => {
-        allSelect[1].innerHTML = ' <option value="choose category">Choose Category</option>';
+        allSelect[1].innerHTML = ' <option value="choose category">Choose Brand</option>';
         if (allSelect[0].value != "choose category") {
             let fileterBrand = allBrandData.filter((brand) => brand.category == allSelect[0].value)
             for (let brand of fileterBrand) {
@@ -326,7 +325,7 @@ const createProductFunc = () => {
     }
     //Read brand for List
     catListSelect.onchange = () => {
-        brandListSelect.innerHTML = ' <option value="choose category">Choose Category</option>';
+        brandListSelect.innerHTML = ' <option value="choose category">Choose Brand</option>';
         if (catListSelect.value != "choose category") {
             let fileterBrand = allBrandData.filter((brand) => brand.category == catListSelect.value)
             for (let brand of fileterBrand) {
@@ -374,4 +373,85 @@ const createProductFunc = () => {
         }
         fReader.readAsDataURL(allInput[7].files[0]);
     }
+    //Create Product coding
+    productForm.onsubmit = (e) => {
+        e.preventDefault();
+        if (allSelect[1].value != "choose brand") {
+            allProductData.push({
+                category: allSelect[0].value,
+                brand: allSelect[1].value,
+                title: allInput[0].value,
+                description: textareaEl.value,
+                price: allInput[1].value,
+                quantity: allInput[2].value,
+                thumb: thumb != "" ? thumb : "../common/images/a.png",
+                front: front != "" ? front : "../common/images/a.png",
+                back: back != "" ? back : "../common/images/a.png",
+                right: right != "" ? right : "../common/images/a.png",
+                left: left != "" ? left : "../common/images/a.png",
+
+            });
+            insertData("allProductData", JSON.stringify(allProductData))
+            swal("Data Inserted", "Check Product List", "success");
+
+        }
+        else {
+            swal("Select Brand!", "Please Choose brand First", "waring")
+        }
+    }
+    //Read Product
+    brandListSelect.onchange = function () {
+        if (this.value != "choose brand") {
+            let id = 0;
+            let filterProdcut = [];
+            for (let product of allProductData) {
+                if (product.category == catListSelect.value && product.brand == this.value) {
+                    product["id"] = id;
+                    filterProdcut.push(product);
+                }
+                id++;
+            }
+            readProductFunc(filterProdcut)
+
+        }
+        else {
+            swal("Select Brand!", "Please Choose any brand First", "warning");
+        }
+    }
+}
+//Read Product Coding
+const readProductFunc = (filterProdcut) => {
+    let brandList = document.querySelector(".brand-list");
+    brandList.innerHTML = "";
+    filterProdcut.forEach((product, index) => {
+        console.log(product)
+        brandList.innerHTML += `<tr id="${product.id}" index="${index}">
+                                <td class="text-nowrap">${index + 1}</td>
+                                <td class="text-nowrap">${product.category}</td>
+                                <td class="text-nowrap">${product.brand}</td>
+                                <td class="text-nowrap">${product.title}</td>
+                                <td class="text-nowrap">${product.description}</td>
+                                <td class="text-nowrap">${product.price}</td>
+                                <td class="text-nowrap">${product.quantity}</td>
+                                <td class="text-nowrap">
+                                    <img src="${product.thumb}" width="50px" alt="">
+                                </td>
+                                <td class="text-nowrap">
+                                    <img src="${product.front}" width="50px" alt="">
+                                </td>
+                                <td class="text-nowrap">
+                                    <img src="${product.back}" width="50px" alt="">
+                                </td>
+                                <td class="text-nowrap">
+                                    <img src="${product.right}" width="50px" alt="">
+                                </td>
+                                <td class="text-nowrap">
+                                    <img src="${product.left}" width="50px" alt="">
+                                </td>
+                                <td class="text-nowrap">
+                                    <button class="btn btn-primary p-1 mx-2"> <i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-danger p-1 mx-2"> <i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>`;
+    });
 }
