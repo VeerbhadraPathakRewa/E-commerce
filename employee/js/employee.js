@@ -295,11 +295,11 @@ const createProductFunc = () => {
     allBrandData = getAllData("allBrandData");
     allProductData = getAllData("allProductData");
     let productForm = document.querySelector(".product-form");
-    let catListSelect = document.querySelector(".category-list-select");
-    let brandListSelect = document.querySelector(".brand-list-select");
     let allSelect = productForm.querySelectorAll("select");
     let allInput = productForm.querySelectorAll("input");
     let textareaEl = productForm.querySelector("textarea");
+    let catListSelect = document.querySelector(".category-list-select");
+    let brandListSelect = document.querySelector(".brand-list-select");
     //Read Category for Form
     for (let category of allcategoryData) {
         allSelect[0].innerHTML += `
@@ -421,10 +421,16 @@ const createProductFunc = () => {
 }
 //Read Product Coding
 const readProductFunc = (filterProdcut) => {
+    let productForm = document.querySelector(".product-form");
+    let allSelect = productForm.querySelectorAll("select");
+    let allBtn = productForm.querySelectorAll("button");
+    let allInput = productForm.querySelectorAll("input");
+    let textareaEl = productForm.querySelector("textarea");
     let brandList = document.querySelector(".brand-list");
+    let option = allSelect[1].querySelector("option");
+
     brandList.innerHTML = "";
     filterProdcut.forEach((product, index) => {
-        console.log(product)
         brandList.innerHTML += `<tr id="${product.id}" index="${index}">
                                 <td class="text-nowrap">${index + 1}</td>
                                 <td class="text-nowrap">${product.category}</td>
@@ -449,9 +455,92 @@ const readProductFunc = (filterProdcut) => {
                                     <img src="${product.left}" width="50px" alt="">
                                 </td>
                                 <td class="text-nowrap">
-                                    <button class="btn btn-primary p-1 mx-2"> <i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-danger p-1 mx-2"> <i class="fa fa-trash"></i></button>
+                                    <button class="btn btn-primary edit-btn p-1 mx-2"> <i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-danger p-1 del-btn mx-2"> <i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>`;
     });
+    //start Delete Product coding
+    let allDelBtn = brandList.querySelectorAll(".del-btn");
+    for (let btn of allDelBtn) {
+        btn.onclick = () => {
+            let parent = btn.parentElement.parentElement;
+            let id = parent.getAttribute("id");
+            let index = parent.getAttribute("index");
+            allProductData.splice(id, 1);
+            filterProdcut.splice(index, 1);
+            deleteAndUpdateFunc("allProductData", JSON.stringify(allProductData), dy_Link, "Deleted", filterProdcut);
+        }
+    }
+    //start update product coding
+    let allEditBtn = brandList.querySelectorAll(".edit-btn");
+    for (let btn of allEditBtn) {
+        btn.onclick = function () {
+
+            let parent = btn.parentElement.parentElement;
+            let id = parent.getAttribute("id");
+            let index = parent.getAttribute("index");
+            let allTd = parent.querySelectorAll("td");
+            let allImg = parent.querySelectorAll("img");
+            let category = allTd[1].innerHTML;
+            let brand = allTd[2].innerHTML;
+            let name = allTd[3].innerHTML;
+            let description = allTd[4].innerHTML;
+            let price = allTd[5].innerHTML;
+            let quantity = allTd[6].innerHTML;
+            thumb = allImg[0].src;
+            front = allImg[1].src;
+            back = allImg[2].src;
+            right = allImg[3].src;
+            left = allImg[4].src;
+            allSelect[0].value = category;
+            allSelect[0].disabled = true;
+            option.value = brand;
+            option.innerHTML = brand;
+            allSelect[1].disabled = true;
+
+            allInput[0].value = name;
+            textareaEl.value = description;
+            allInput[1].value = price;
+            allInput[2].value = quantity;
+            allBtn[0].classList.add("d-none");
+            allBtn[1].classList.remove("d-none");
+            //Request for update
+            allBtn[1].onclick = () => {
+                allProductData[id] = {
+                    category: allSelect[0].value,
+                    brand: allSelect[1].value,
+                    title: allInput[0].value,
+                    description: textareaEl.value,
+                    price: allInput[1].value,
+                    quantity: allInput[2].value,
+                    thumb: thumb != "" ? thumb : "../common/images/a.png",
+                    front: front != "" ? front : "../common/images/a.png",
+                    back: back != "" ? back : "../common/images/a.png",
+                    right: right != "" ? right : "../common/images/a.png",
+                    left: left != "" ? left : "../common/images/a.png",
+                }
+                filterProdcut[index] = {
+                    category: allSelect[0].value,
+                    brand: allSelect[1].value,
+                    title: allInput[0].value,
+                    description: textareaEl.value,
+                    price: allInput[1].value,
+                    quantity: allInput[2].value,
+                    thumb: thumb != "" ? thumb : "../common/images/a.png",
+                    front: front != "" ? front : "../common/images/a.png",
+                    back: back != "" ? back : "../common/images/a.png",
+                    right: right != "" ? right : "../common/images/a.png",
+                    left: left != "" ? left : "../common/images/a.png",
+                }
+                const isUpdate = deleteAndUpdateFunc("allProductData", JSON.stringify(allProductData), dy_Link, "Updated", filterProdcut);
+                if (isUpdate == true) {
+                    allBtn[0].classList.remove("d-none");
+                    allBtn[1].classList.add("d-none");
+                    productForm.reset();
+                }
+            }
+
+        }
+    }
 }

@@ -31,6 +31,10 @@ const deleteAndUpdateFunc = (table_name, data, link, massage, filterData) => {
                 else if (link == "dynamic/brand_designe.html") {
                     readBrandFunc(filterData);
                 }
+                else if (link == "dynamic/product_designe.html") {
+                    readProductFunc(filterData);
+                    return true;
+                }
                 swal("Success! Your  Imaginary file has been " + massage + "!",
                     {
                         icon: "success",
