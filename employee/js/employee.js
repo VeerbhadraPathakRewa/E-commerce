@@ -1,9 +1,7 @@
 window.onload = () => {
     collapsFunc();
     DynamicRequestFunc();
-    setTimeout(() => {
-        togglerFunc();
-    }, 100);
+
 }
 //Globle Variables
 let allcategoryData = [];
@@ -15,6 +13,7 @@ let front = "";
 let back = "";
 let right = "";
 let left = "";
+let brand_logo = "";
 
 
 
@@ -57,11 +56,14 @@ const dynamicAjaxFunc = (link) => {
         if (link == "dynamic/cat_designe.html") {
             createCategoryFunc();
         }
-        if (link == "dynamic/brand_designe.html") {
+        else if (link == "dynamic/brand_designe.html") {
             createBrandFunc();
         }
-        if (link == "dynamic/product_designe.html") {
+        else if (link == "dynamic/product_designe.html") {
             createProductFunc();
+        }
+        else if (link == "dynamic/branding_designe.html") {
+            createBrandingFunc();
         }
     }
 }
@@ -542,5 +544,57 @@ const readProductFunc = (filterProdcut) => {
             }
 
         }
+    }
+}
+//Create branding Details coding
+const createBrandingFunc = () => {
+    let allBrandingDetails = [];
+    let brandingForm = document.querySelector(".branding-form");
+    let allInput = brandingForm.querySelectorAll("input");
+    let allTextArea = brandingForm.querySelectorAll("textarea");
+    let lengthCountTextArea = brandingForm.querySelectorAll(".textarea");
+    let allBtn = brandingForm.querySelectorAll("button");
+
+    //count textArea length
+    for (let textarea of lengthCountTextArea) {
+        textarea.oninput = () => {
+            let parent = textarea.parentElement;
+            let span = parent.querySelector("span");
+            let length = textarea.value.length;
+            span.innerHTML = length;
+
+
+        }
+    }
+    allInput[1].onchange = () => {
+        let fReader = new FileReader();
+        fReader.onload = (e) => {
+            brand_logo = e.target.result;
+        }
+        fReader.readAsDataURL(allInput[1].files[0]);
+    }
+
+    //Store branding details
+    brandingForm.onsubmit = (e) => {
+        e.preventDefault();
+        allBrandingDetails.push({
+            b_name: allInput[0],
+            b_logo: brand_logo,
+            b_domail: allInput[2].value,
+            b_email: allInput[3].value,
+            b_facebook: allInput[4].value,
+            b_twitter: allInput[5].value,
+            b_whatsapp: allInput[6].value,
+            b_instagram: allInput[7].value,
+            b_mobile: allInput[8].value,
+            b_address: allTextArea[0].value,
+            b_about: allTextArea[1].value,
+            b_privacy: allTextArea[2].value,
+            b_cookie: allTextArea[3].value,
+            b_terms: allTextArea[4].value,
+        });
+        insertData("allBrandingDetails", JSON.stringify(allBrandingDetails));
+        swal("Data inserted", "Check Branding table!", "success");
+
     }
 }
