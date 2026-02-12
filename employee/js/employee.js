@@ -548,12 +548,13 @@ const readProductFunc = (filterProdcut) => {
 }
 //Create branding Details coding
 const createBrandingFunc = () => {
-    let allBrandingDetails = [];
+
     let brandingForm = document.querySelector(".branding-form");
     let allInput = brandingForm.querySelectorAll("input");
     let allTextArea = brandingForm.querySelectorAll("textarea");
     let lengthCountTextArea = brandingForm.querySelectorAll(".textarea");
     let allBtn = brandingForm.querySelectorAll("button");
+    let editBrandBtn = document.querySelector(".edit-branding-btn");
 
     //count textArea length
     for (let textarea of lengthCountTextArea) {
@@ -577,10 +578,62 @@ const createBrandingFunc = () => {
     //Store branding details
     brandingForm.onsubmit = (e) => {
         e.preventDefault();
-        allBrandingDetails.push({
-            b_name: allInput[0],
+        insertBrandingFunc();
+        readBrandingFunc();
+
+    }
+    //Reading Branding Data
+    const readBrandingFunc = () => {
+        let branding = getAllData("allBrandingData");
+        if (branding.length > 0) {
+            //Created brand
+            editBrandBtn.classList.remove("d-none");
+            allInput[0].value = branding[0].b_name;
+            brand_logo = branding[0].b_logo;
+            allInput[2].value = branding[0].b_domain;
+            allInput[3].value = branding[0].b_email;
+            allInput[4].value = branding[0].b_facebook;
+            allInput[5].value = branding[0].b_twitter;
+            allInput[6].value = branding[0].b_whatsapp;
+            allInput[7].value = branding[0].b_instagram;
+            allInput[8].value = branding[0].b_mobile;
+            allTextArea[0].value = branding[0].b_address;
+            allTextArea[1].value = branding[0].b_about;
+            allTextArea[2].value = branding[0].b_privacy;
+            allTextArea[3].value = branding[0].b_cookie;
+            allTextArea[4].value = branding[0].b_terms;
+
+            for (let input of allInput) {
+                input.disabled = true;
+            }
+            for (let textarea of allTextArea) {
+                textarea.disabled = true;
+            }
+            allBtn[0].classList.add("d-none")
+            allBtn[1].classList.remove("d-none")
+            editBrandBtn.onclick = () => {
+                for (let input of allInput) {
+                    input.disabled = false;
+                }
+                for (let textarea of allTextArea) {
+                    textarea.disabled = false;
+                }
+
+                allBtn[1].disabled = false
+            }
+            allBtn[1].disabled = true;
+            
+        }
+       
+    }
+    readBrandingFunc();
+
+    const insertBrandingFunc = () => {
+        let allBrandingData = [];
+        allBrandingData.push({
+            b_name: allInput[0].value.trim(),
             b_logo: brand_logo,
-            b_domail: allInput[2].value,
+            b_domain: allInput[2].value,
             b_email: allInput[3].value,
             b_facebook: allInput[4].value,
             b_twitter: allInput[5].value,
@@ -593,8 +646,7 @@ const createBrandingFunc = () => {
             b_cookie: allTextArea[3].value,
             b_terms: allTextArea[4].value,
         });
-        insertData("allBrandingDetails", JSON.stringify(allBrandingDetails));
+        insertData("allBrandingData", JSON.stringify(allBrandingData));
         swal("Data inserted", "Check Branding table!", "success");
-
     }
 }
