@@ -1,5 +1,5 @@
 const insertData = (table_name, data) => {
-    localStorage.setItem(table_name, data)
+    localStorage.setItem(table_name, JSON.stringify(data))
 }
 const getAllData = (table_name) => {
 

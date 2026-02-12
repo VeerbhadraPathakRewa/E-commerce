@@ -647,3 +647,4 @@ const createBrandingFunc = () => {
         swal("Data inserted", "Check Branding table!", "success");
     }
 }
+console.log(localStorage.getItem("allcategoryData"))
