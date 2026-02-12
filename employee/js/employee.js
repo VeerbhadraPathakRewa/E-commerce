@@ -14,9 +14,6 @@ let back = "";
 let right = "";
 let left = "";
 let brand_logo = "";
-
-
-
 //Start Collaps Codding
 const collapsFunc = () => {
     let collapseBtn = document.querySelector(".collapse-btn");
