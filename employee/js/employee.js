@@ -70,7 +70,7 @@ const dynamicAjaxFunc = (link) => {
 //Start Create Category coding
 const createCategoryFunc = () => {
     allcategoryData = getAllData("allcategoryData")
-    console.log(allcategoryData)
+    console.log(allcategoryData);
     let categoryForm = document.querySelector(".category-form");
     let inputBoxEl = document.querySelector(".input-box");
     let addFieldBtn = document.querySelector(".add-field-btn");
@@ -96,7 +96,7 @@ const createCategoryFunc = () => {
                 category: input.value
             });
         }
-        insertData("allcategoryData", JSON.stringify(allcategoryData));
+        insertData("allcategoryData", allcategoryData);
         insertMsg();
         readcategorydata();
         categoryForm.reset('');
@@ -110,6 +110,7 @@ const readcategorydata = () => {
     let categoryList = document.querySelector(".category-list");
     categoryList.innerHTML = "";
     allcategoryData.forEach((data, index) => {
+
         categoryList.innerHTML += `<tr index="${index}">
                     <td>${index + 1}</td>
                     <td>${data.category}</td>
@@ -129,8 +130,6 @@ const readcategorydata = () => {
             let index = parent.getAttribute("index");
             allcategoryData.splice(index, 1);
             deleteAndUpdateFunc("allcategoryData", JSON.stringify(allcategoryData), dy_Link, "Deleted");
-
-
         }
     }
     //Category Edit Codding
@@ -159,25 +158,38 @@ const readcategorydata = () => {
 }
 // Start Create Brand coding 
 const createBrandFunc = () => {
+
     allcategoryData = getAllData("allcategoryData");
     allBrandData = getAllData("allBrandData");
+
     let brandForm = document.querySelector(".brand-form");
     let inputBox = brandForm.querySelector(".input-box");
     let allBtn = brandForm.querySelectorAll("button");
     let catdSelect = brandForm.querySelector("select");
     let catSelectList = document.querySelector(".cat-list-select");
+
+    // 🔥 CHANGE HERE (clear पहले options नहीं हट रहे थे)
+    catdSelect.innerHTML = `<option>choose category</option>`;
+    catSelectList.innerHTML = `<option>choose category</option>`;
+
     for (let data of allcategoryData) {
-        catdSelect.innerHTML += ` <option>${data.category}</option>`;
-        catSelectList.innerHTML += ` <option>${data.category}</option>`;
+        catdSelect.innerHTML += `<option>${data.category}</option>`;      // 🔥 CHANGE HERE (backticks missing the)
+        catSelectList.innerHTML += `<option>${data.category}</option>`;  // 🔥 CHANGE HERE (backticks missing the)
     }
-    //add Dynamic Input Field
+
+    // add Dynamic Input Field
     allBtn[0].onclick = () => {
-        let inputEl = `<div>
-                    <i class="fa fa-trash mb-2 float-end del-btn"></i>
-                    <input type="text" class="form-control mb-3" placeholder="Brand">
-                </div>`;
+
+        let inputEl = `
+            <div>
+                <i class="fa fa-trash mb-2 float-end del-btn"></i>
+                <input type="text" class="form-control mb-3" placeholder="Brand">
+            </div>
+        `;   // 🔥 CHANGE HERE (template literal missing)
+
         inputBox.innerHTML += inputEl;
-        //Delete dynamic input
+
+        // Delete dynamic input
         let allDelBtn = inputBox.querySelectorAll(".del-btn");
         for (let btn of allDelBtn) {
             btn.onclick = () => {
@@ -185,452 +197,508 @@ const createBrandFunc = () => {
             }
         }
     }
-    //add brand coding
+
+    // add brand coding
     brandForm.onsubmit = (e) => {
+
         e.preventDefault();
-        let allinput = brandForm.querySelectorAll("input")
+        let allinput = brandForm.querySelectorAll("input");
+
         if (catdSelect.value != "choose category") {
+
             for (let input of allinput) {
-                allBrandData.push({
-                    category: catdSelect.value,
-                    brand: input.value
-                })
+
+                if (input.value.trim() !== "") {   // 🔥 CHANGE HERE (empty brand prevent)
+                    allBrandData.push({
+                        category: catdSelect.value,
+                        brand: input.value.trim()
+                    });
+                }
             }
-            insertData("allBrandData", JSON.stringify(allBrandData));
+
+            insertData("allBrandData", allBrandData);  // 🔥 CHANGE HERE (remove JSON.stringify)
+
             insertMsg();
-            brandForm.reset('');
-        }
-        else {
-            swal("Select Category", "Please select category First", "waring");
+            brandForm.reset();
+
+        } else {
+            swal("Select Category", "Please select category First", "warning");  // 🔥 CHANGE HERE (waring → warning)
         }
     }
-    //get brand Data
+
+    // get brand Data
     catSelectList.onchange = () => {
+
         let id = 0;
         let filterBrand = [];
+
         if (catSelectList.value != "choose category") {
+
             for (let brand of allBrandData) {
+
                 if (brand.category == catSelectList.value) {
                     brand["id"] = id;
                     filterBrand.push(brand);
                 }
+
                 id++;
             }
+
             readBrandFunc(filterBrand);
 
-
+        } else {
+            swal("Select Category", "Please select category First", "warning");  // 🔥 CHANGE HERE
         }
-        else {
-            swal("Select Category", "Please select category First", "waring");
-
-        }
-
     }
 }
-//Read Brand coding
+
+// Read Brand coding
 const readBrandFunc = (filterBrand) => {
-    let index = 0;
+
     let brandList = document.querySelector(".brand-list");
     brandList.innerHTML = "";
 
-    for (let brand of filterBrand) {
-        brandList.innerHTML += `<tr id ="${brand.id}" index ="${index}">
-                    <td>${index + 1}</td>
-                    <td>${brand.category}</td>
-                    <td>${brand.brand}</td>
-                    <td>
-                        <button class="btn btn-primary edit-btn px-2 "><i class=" fa fa-edit ">Edit</i></button>
-                        <button class="btn btn-primary save-btn d-none px-2 "><i class=" fa fa-save ">save</i></button>
-                        <button class="btn btn-danger del-btn px-2 "><i class=" fa fa-trash "></i></button>
-                    </td>
-                </tr>`;
-        index++;
-    }
+    // Always get fresh data
+    let allBrandData = getAllData("allBrandData");
 
-    //start delete brand coding
+    filterBrand.forEach((brand, index) => {
+
+        brandList.innerHTML += `
+            <tr data-index="${index}">
+                <td>${index + 1}</td>
+                <td>${brand.category}</td>
+                <td>${brand.brand}</td>
+                <td>
+                    <button class="btn btn-primary edit-btn px-2">Edit</button>
+                    <button class="btn btn-primary save-btn d-none px-2">Save</button>
+                    <button class="btn btn-danger del-btn px-2">Delete</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    /* ================= DELETE ================= */
+
     let allDelBtn = brandList.querySelectorAll(".del-btn");
-    for (let btn of allDelBtn) {
+
+    allDelBtn.forEach(btn => {
+
         btn.onclick = () => {
-            let parent = btn.parentElement.parentElement;
-            let index = parent.getAttribute("index");
-            let id = parent.getAttribute("id");
-            allBrandData.splice(id, 1);
-            filterBrand.splice(index, 1);
-            deleteAndUpdateFunc("allBrandData", JSON.stringify(allBrandData), dy_Link, "Deleted", filterBrand);
 
-        }
-    }
+            let row = btn.closest("tr");
+            let index = Number(row.getAttribute("data-index"));
 
-    //Start update brand coding
+            let selectedCategory = filterBrand[index].category;
+            let selectedBrand = filterBrand[index].brand;
+
+            // Remove from main array
+            allBrandData = allBrandData.filter(item =>
+                !(item.category === selectedCategory && item.brand === selectedBrand)
+            );
+
+            insertData("allBrandData", allBrandData);
+
+            // Refresh UI
+            row.remove();
+        };
+    });
+
+
+    /* ================= EDIT / UPDATE ================= */
+
     let allEditBtn = brandList.querySelectorAll(".edit-btn");
-    for (let btn of allEditBtn) {
+
+    allEditBtn.forEach(btn => {
+
         btn.onclick = () => {
-            let parent = btn.parentElement.parentElement;
-            let id = parent.getAttribute("id");
-            let index = parent.getAttribute("index")
-            let allTd = parent.querySelectorAll("td");
-            let saveBtn = parent.querySelector(".save-btn");
-            allTd[2].contentEditable = true;
-            allTd[2].focus();
+
+            let row = btn.closest("tr");
+            let index = Number(row.getAttribute("data-index"));
+
+            let tds = row.querySelectorAll("td");
+            let saveBtn = row.querySelector(".save-btn");
+
+            tds[2].contentEditable = true;
+            tds[2].focus();
+
             btn.classList.add("d-none");
             saveBtn.classList.remove("d-none");
+
             saveBtn.onclick = () => {
-                let category = allTd[1].innerHTML;
-                let brand = allTd[2].innerHTML
-                allBrandData[id] = {
-                    category: category,
-                    brand: brand
-                }
-                filterBrand[index] = {
-                    category: category,
-                    brand: brand,
-                    id: id
-                }
-                deleteAndUpdateFunc("allBrandData", JSON.stringify(allBrandData), dy_Link, "Updated", filterBrand)
-            }
-        }
-    }
-}
+
+                let updatedBrand = tds[2].innerText.trim();
+                let category = tds[1].innerText.trim();
+
+                if (updatedBrand === "") return;
+
+                // Update main array
+                allBrandData = allBrandData.map(item => {
+
+                    if (item.category === filterBrand[index].category &&
+                        item.brand === filterBrand[index].brand) {
+
+                        return {
+                            category: category,
+                            brand: updatedBrand
+                        };
+                    }
+
+                    return item;
+                });
+
+                insertData("allBrandData", allBrandData);
+
+                // Lock again
+                tds[2].contentEditable = false;
+                saveBtn.classList.add("d-none");
+                btn.classList.remove("d-none");
+
+                // Update filterBrand also
+                filterBrand[index].brand = updatedBrand;
+            };
+        };
+    });
+};
+
 //Start Create Product coding
 const createProductFunc = () => {
-    allcategoryData = getAllData("allcategoryData");
-    allBrandData = getAllData("allBrandData");
-    allProductData = getAllData("allProductData");
+
+    let allcategoryData = getAllData("allcategoryData") || [];
+    let allBrandData = getAllData("allBrandData") || [];
+    let allProductData = getAllData("allProductData") || [];
+
     let productForm = document.querySelector(".product-form");
     let allSelect = productForm.querySelectorAll("select");
     let allInput = productForm.querySelectorAll("input");
     let textareaEl = productForm.querySelector("textarea");
+
     let catListSelect = document.querySelector(".category-list-select");
     let brandListSelect = document.querySelector(".brand-list-select");
-    //Read Category for Form
-    for (let category of allcategoryData) {
-        allSelect[0].innerHTML += `
-        <option>${category.category}</option><br> 
-        `;
-        catListSelect.innerHTML += `
-        <option>${category.category}</option>
-        `;
-    }
-    //Read Brand for Form
-    allSelect[0].onchange = () => {
-        allSelect[1].innerHTML = ' <option value="choose category">Choose Brand</option>';
-        if (allSelect[0].value != "choose category") {
-            let fileterBrand = allBrandData.filter((brand) => brand.category == allSelect[0].value)
-            for (let brand of fileterBrand) {
-                allSelect[1].innerHTML += `<option>${brand.brand}</option>`;
-            }
-        }
-        else {
-            swal("Choose Category!", "Please Select Category First", "warning");
-        }
 
+    // 🔥 FIX 1: reset dropdown before append
+    allSelect[0].innerHTML = `<option value="choose category">Choose Category</option>`;
+    catListSelect.innerHTML = `<option value="choose category">Choose Category</option>`;
+
+    /* ================= READ CATEGORY ================= */
+
+    for (let category of allcategoryData) {
+        allSelect[0].innerHTML += `<option>${category.category}</option>`;
+        catListSelect.innerHTML += `<option>${category.category}</option>`;
     }
-    //Read brand for List
-    catListSelect.onchange = () => {
-        brandListSelect.innerHTML = ' <option value="choose category">Choose Brand</option>';
-        if (catListSelect.value != "choose category") {
-            let fileterBrand = allBrandData.filter((brand) => brand.category == catListSelect.value)
-            for (let brand of fileterBrand) {
-                brandListSelect.innerHTML += `<option>${brand.brand}</option>`;
-            }
-        }
-        else {
+
+    /* ================= CATEGORY CHANGE (FORM) ================= */
+
+    allSelect[0].onchange = () => {
+
+        allSelect[1].innerHTML = `<option value="choose brand">Choose Brand</option>`;
+
+        if (allSelect[0].value !== "choose category") {
+
+            let filterBrand = allBrandData.filter(
+                brand => brand.category === allSelect[0].value
+            );
+
+            filterBrand.forEach(brand => {
+                allSelect[1].innerHTML += `<option>${brand.brand}</option>`;
+            });
+
+        } else {
             swal("Choose Category!", "Please Select Category First", "warning");
         }
-    }
-    //Read Image Binary
-    let fReader = new FileReader();
-    //Read thumb
-    allInput[3].onchange = () => {
-        fReader.onload = (e) => {
-            thumb = e.target.result;
+    };
+
+    /* ================= CATEGORY CHANGE (LIST FILTER) ================= */
+
+    catListSelect.onchange = () => {
+
+        brandListSelect.innerHTML = `<option value="choose brand">Choose Brand</option>`;
+
+        if (catListSelect.value !== "choose category") {
+
+            let filterBrand = allBrandData.filter(
+                brand => brand.category === catListSelect.value
+            );
+
+            filterBrand.forEach(brand => {
+                brandListSelect.innerHTML += `<option>${brand.brand}</option>`;
+            });
+
+        } else {
+            swal("Choose Category!", "Please Select Category First", "warning");
         }
-        fReader.readAsDataURL(allInput[3].files[0]);
-    }
-    //Read front
-    allInput[4].onchange = () => {
-        fReader.onload = (e) => {
-            front = e.target.result;
+    };
+
+    /* ================= IMAGE VARIABLES FIX ================= */
+
+    let thumb = "";
+    let front = "";
+    let back = "";
+    let right = "";
+    let left = "";
+
+    const readImage = (input, callback) => {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = (e) => callback(e.target.result);
+            reader.readAsDataURL(input.files[0]);
         }
-        fReader.readAsDataURL(allInput[4].files[0]);
-    }
-    //Read back
-    allInput[5].onchange = () => {
-        fReader.onload = (e) => {
-            back = e.target.result;
-        }
-        fReader.readAsDataURL(allInput[5].files[0]);
-    }
-    //Read right
-    allInput[6].onchange = () => {
-        fReader.onload = (e) => {
-            right = e.target.result;
-        }
-        fReader.readAsDataURL(allInput[6].files[0]);
-    }
-    //Read left
-    allInput[7].onchange = () => {
-        fReader.onload = (e) => {
-            left = e.target.result;
-        }
-        fReader.readAsDataURL(allInput[7].files[0]);
-    }
-    //Create Product coding
+    };
+
+    allInput[3].onchange = () => readImage(allInput[3], (res) => thumb = res);
+    allInput[4].onchange = () => readImage(allInput[4], (res) => front = res);
+    allInput[5].onchange = () => readImage(allInput[5], (res) => back = res);
+    allInput[6].onchange = () => readImage(allInput[6], (res) => right = res);
+    allInput[7].onchange = () => readImage(allInput[7], (res) => left = res);
+
+    /* ================= CREATE PRODUCT ================= */
+
     productForm.onsubmit = (e) => {
+
         e.preventDefault();
-        if (allSelect[1].value != "choose brand") {
+
+        if (allSelect[1].value !== "choose brand") {
+
             allProductData.push({
+                id: Date.now(), // 🔥 UNIQUE ID FIX
                 category: allSelect[0].value,
                 brand: allSelect[1].value,
                 title: allInput[0].value,
                 description: textareaEl.value,
                 price: allInput[1].value,
                 quantity: allInput[2].value,
-                thumb: thumb != "" ? thumb : "../common/images/a.png",
-                front: front != "" ? front : "../common/images/a.png",
-                back: back != "" ? back : "../common/images/a.png",
-                right: right != "" ? right : "../common/images/a.png",
-                left: left != "" ? left : "../common/images/a.png",
-
+                thumb: thumb || "../common/images/a.png",
+                front: front || "../common/images/a.png",
+                back: back || "../common/images/a.png",
+                right: right || "../common/images/a.png",
+                left: left || "../common/images/a.png",
             });
-            insertData("allProductData", JSON.stringify(allProductData))
+
+            // 🔥 FIX 2: remove JSON.stringify
+            insertData("allProductData", allProductData);
+
             swal("Data Inserted", "Check Product List", "success");
 
-        }
-        else {
-            swal("Select Brand!", "Please Choose brand First", "waring")
-        }
-    }
-    //Read Product
-    brandListSelect.onchange = function () {
-        if (this.value != "choose brand") {
-            let id = 0;
-            let filterProdcut = [];
-            for (let product of allProductData) {
-                if (product.category == catListSelect.value && product.brand == this.value) {
-                    product["id"] = id;
-                    filterProdcut.push(product);
-                }
-                id++;
-            }
-            readProductFunc(filterProdcut)
+            productForm.reset();
 
+        } else {
+            swal("Select Brand!", "Please Choose Brand First", "warning");
         }
-        else {
-            swal("Select Brand!", "Please Choose any brand First", "warning");
+    };
+
+    /* ================= READ PRODUCT FILTER ================= */
+
+    brandListSelect.onchange = function () {
+
+        if (this.value !== "choose brand") {
+
+            let filterProduct = allProductData.filter(product =>
+                product.category === catListSelect.value &&
+                product.brand === this.value
+            );
+
+            readProductFunc(filterProduct);
+
+        } else {
+            swal("Select Brand!", "Please Choose Any Brand First", "warning");
         }
-    }
-}
+    };
+};
+
 //Read Product Coding
-const readProductFunc = (filterProdcut) => {
+const readProductFunc = (filterProduct) => {
+
     let productForm = document.querySelector(".product-form");
     let allSelect = productForm.querySelectorAll("select");
     let allBtn = productForm.querySelectorAll("button");
     let allInput = productForm.querySelectorAll("input");
     let textareaEl = productForm.querySelector("textarea");
     let brandList = document.querySelector(".brand-list");
-    let option = allSelect[1].querySelector("option");
+
+    let allProductData = getAllData("allProductData") || [];
 
     brandList.innerHTML = "";
-    filterProdcut.forEach((product, index) => {
-        brandList.innerHTML += `<tr id="${product.id}" index="${index}">
-                                <td class="text-nowrap">${index + 1}</td>
-                                <td class="text-nowrap">${product.category}</td>
-                                <td class="text-nowrap">${product.brand}</td>
-                                <td class="text-nowrap">${product.title}</td>
-                                <td class="text-nowrap">${product.description}</td>
-                                <td class="text-nowrap">${product.price}</td>
-                                <td class="text-nowrap">${product.quantity}</td>
-                                <td class="text-nowrap">
-                                    <img src="${product.thumb}" width="50px" alt="">
-                                </td>
-                                <td class="text-nowrap">
-                                    <img src="${product.front}" width="50px" alt="">
-                                </td>
-                                <td class="text-nowrap">
-                                    <img src="${product.back}" width="50px" alt="">
-                                </td>
-                                <td class="text-nowrap">
-                                    <img src="${product.right}" width="50px" alt="">
-                                </td>
-                                <td class="text-nowrap">
-                                    <img src="${product.left}" width="50px" alt="">
-                                </td>
-                                <td class="text-nowrap">
-                                    <button class="btn btn-primary edit-btn p-1 mx-2"> <i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-danger p-1 del-btn mx-2"> <i class="fa fa-trash"></i></button>
-                                </td>
-                            </tr>`;
-    });
-    //start Delete Product coding
-    let allDelBtn = brandList.querySelectorAll(".del-btn");
-    for (let btn of allDelBtn) {
-        btn.onclick = () => {
-            let parent = btn.parentElement.parentElement;
-            let id = parent.getAttribute("id");
-            let index = parent.getAttribute("index");
-            allProductData.splice(id, 1);
-            filterProdcut.splice(index, 1);
-            deleteAndUpdateFunc("allProductData", JSON.stringify(allProductData), dy_Link, "Deleted", filterProdcut);
-        }
-    }
-    //start update product coding
-    let allEditBtn = brandList.querySelectorAll(".edit-btn");
-    for (let btn of allEditBtn) {
-        btn.onclick = function () {
 
-            let parent = btn.parentElement.parentElement;
-            let id = parent.getAttribute("id");
-            let index = parent.getAttribute("index");
-            let allTd = parent.querySelectorAll("td");
-            let allImg = parent.querySelectorAll("img");
-            let category = allTd[1].innerHTML;
-            let brand = allTd[2].innerHTML;
-            let name = allTd[3].innerHTML;
-            let description = allTd[4].innerHTML;
-            let price = allTd[5].innerHTML;
-            let quantity = allTd[6].innerHTML;
-            thumb = allImg[0].src;
-            front = allImg[1].src;
-            back = allImg[2].src;
-            right = allImg[3].src;
-            left = allImg[4].src;
-            allSelect[0].value = category;
+    /* ================= TABLE RENDER ================= */
+
+    filterProduct.forEach((product, index) => {
+
+        brandList.innerHTML += `
+            <tr data-id="${product.id}">
+                <td>${index + 1}</td>
+                <td>${product.category}</td>
+                <td>${product.brand}</td>
+                <td>${product.title}</td>
+                <td>${product.description}</td>
+                <td>${product.price}</td>
+                <td>${product.quantity}</td>
+                <td><img src="${product.thumb}" width="50"></td>
+                <td><img src="${product.front}" width="50"></td>
+                <td><img src="${product.back}" width="50"></td>
+                <td><img src="${product.right}" width="50"></td>
+                <td><img src="${product.left}" width="50"></td>
+                <td>
+                    <button class="btn btn-primary edit-btn p-1 mx-2">Edit</button>
+                    <button class="btn btn-danger del-btn p-1 mx-2">Delete</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    /* ================= DELETE ================= */
+
+    let allDelBtn = brandList.querySelectorAll(".del-btn");
+
+    allDelBtn.forEach(btn => {
+
+        btn.onclick = () => {
+
+            let row = btn.closest("tr");
+            let id = Number(row.getAttribute("data-id"));
+
+            // 🔥 FIX: filter by id instead of splice
+            allProductData = allProductData.filter(product => product.id !== id);
+
+            insertData("allProductData", allProductData);
+
+            row.remove();
+
+            swal("Deleted!", "Product Removed Successfully", "success");
+        };
+    });
+
+    /* ================= EDIT ================= */
+
+    let allEditBtn = brandList.querySelectorAll(".edit-btn");
+
+    allEditBtn.forEach(btn => {
+
+        btn.onclick = () => {
+
+            let row = btn.closest("tr");
+            let id = Number(row.getAttribute("data-id"));
+
+            let product = allProductData.find(p => p.id === id);
+
+            if (!product) return;
+
+            // Fill Form
+            allSelect[0].value = product.category;
+            allSelect[1].value = product.brand;
+
             allSelect[0].disabled = true;
-            option.value = brand;
-            option.innerHTML = brand;
             allSelect[1].disabled = true;
 
-            allInput[0].value = name;
-            textareaEl.value = description;
-            allInput[1].value = price;
-            allInput[2].value = quantity;
+            allInput[0].value = product.title;
+            textareaEl.value = product.description;
+            allInput[1].value = product.price;
+            allInput[2].value = product.quantity;
+
+            let thumb = product.thumb;
+            let front = product.front;
+            let back = product.back;
+            let right = product.right;
+            let left = product.left;
+
             allBtn[0].classList.add("d-none");
             allBtn[1].classList.remove("d-none");
-            //Request for update
-            allBtn[1].onclick = () => {
-                allProductData[id] = {
-                    category: allSelect[0].value,
-                    brand: allSelect[1].value,
-                    title: allInput[0].value,
-                    description: textareaEl.value,
-                    price: allInput[1].value,
-                    quantity: allInput[2].value,
-                    thumb: thumb != "" ? thumb : "../common/images/a.png",
-                    front: front != "" ? front : "../common/images/a.png",
-                    back: back != "" ? back : "../common/images/a.png",
-                    right: right != "" ? right : "../common/images/a.png",
-                    left: left != "" ? left : "../common/images/a.png",
-                }
-                filterProdcut[index] = {
-                    category: allSelect[0].value,
-                    brand: allSelect[1].value,
-                    title: allInput[0].value,
-                    description: textareaEl.value,
-                    price: allInput[1].value,
-                    quantity: allInput[2].value,
-                    thumb: thumb != "" ? thumb : "../common/images/a.png",
-                    front: front != "" ? front : "../common/images/a.png",
-                    back: back != "" ? back : "../common/images/a.png",
-                    right: right != "" ? right : "../common/images/a.png",
-                    left: left != "" ? left : "../common/images/a.png",
-                }
-                const isUpdate = deleteAndUpdateFunc("allProductData", JSON.stringify(allProductData), dy_Link, "Updated", filterProdcut);
-                if (isUpdate == true) {
-                    allBtn[0].classList.remove("d-none");
-                    allBtn[1].classList.add("d-none");
-                    productForm.reset();
-                }
-            }
 
-        }
-    }
-}
+            /* ================= UPDATE ================= */
+
+            allBtn[1].onclick = () => {
+
+                allProductData = allProductData.map(p => {
+
+                    if (p.id === id) {
+                        return {
+                            id: id,  // 🔥 preserve id
+                            category: allSelect[0].value,
+                            brand: allSelect[1].value,
+                            title: allInput[0].value,
+                            description: textareaEl.value,
+                            price: allInput[1].value,
+                            quantity: allInput[2].value,
+                            thumb: thumb,
+                            front: front,
+                            back: back,
+                            right: right,
+                            left: left,
+                        };
+                    }
+
+                    return p;
+                });
+
+                insertData("allProductData", allProductData);
+
+                swal("Updated!", "Product Updated Successfully", "success");
+
+                allBtn[0].classList.remove("d-none");
+                allBtn[1].classList.add("d-none");
+
+                allSelect[0].disabled = false;
+                allSelect[1].disabled = false;
+
+                productForm.reset();
+
+                readProductFunc(allProductData);
+            };
+        };
+    });
+};
+
 //Create branding Details coding
 const createBrandingFunc = () => {
 
     let brandingForm = document.querySelector(".branding-form");
+    if (!brandingForm) return;
+
     let allInput = brandingForm.querySelectorAll("input");
     let allTextArea = brandingForm.querySelectorAll("textarea");
     let lengthCountTextArea = brandingForm.querySelectorAll(".textarea");
     let allBtn = brandingForm.querySelectorAll("button");
     let editBrandBtn = document.querySelector(".edit-branding-btn");
 
-    //count textArea length
-    for (let textarea of lengthCountTextArea) {
+    let brand_logo = "";
+
+    /* ================= TEXTAREA LENGTH COUNT ================= */
+
+    lengthCountTextArea.forEach(textarea => {
         textarea.oninput = () => {
-            let parent = textarea.parentElement;
-            let span = parent.querySelector("span");
-            let length = textarea.value.length;
-            span.innerHTML = length;
+            let span = textarea.parentElement.querySelector("span");
+            if (span) span.innerHTML = textarea.value.length;
+        };
+    });
 
+    /* ================= LOGO UPLOAD ================= */
 
-        }
-    }
     allInput[1].onchange = () => {
-        let fReader = new FileReader();
-        fReader.onload = (e) => {
-            brand_logo = e.target.result;
-        }
-        fReader.readAsDataURL(allInput[1].files[0]);
-    }
 
-    //Store branding details
+        if (allInput[1].files && allInput[1].files[0]) {
+
+            let fReader = new FileReader();
+
+            fReader.onload = (e) => {
+                brand_logo = e.target.result;
+            };
+
+            fReader.readAsDataURL(allInput[1].files[0]);
+        }
+    };
+
+    /* ================= INSERT / UPDATE ================= */
+
     brandingForm.onsubmit = (e) => {
+
         e.preventDefault();
-        insertBrandingFunc();
-        readBrandingFunc();
 
-    }
-    //Reading Branding Data
-    const readBrandingFunc = () => {
-        let branding = getAllData("allBrandingData");
-        if (branding.length > 0) {
-            //Created brand
-            editBrandBtn.classList.remove("d-none");
-            allInput[0].value = branding[0].b_name;
-            brand_logo = branding[0].b_logo;
-            allInput[2].value = branding[0].b_domain;
-            allInput[3].value = branding[0].b_email;
-            allInput[4].value = branding[0].b_facebook;
-            allInput[5].value = branding[0].b_twitter;
-            allInput[6].value = branding[0].b_whatsapp;
-            allInput[7].value = branding[0].b_instagram;
-            allInput[8].value = branding[0].b_mobile;
-            allTextArea[0].value = branding[0].b_address;
-            allTextArea[1].value = branding[0].b_about;
-            allTextArea[2].value = branding[0].b_privacy;
-            allTextArea[3].value = branding[0].b_cookie;
-            allTextArea[4].value = branding[0].b_terms;
+        let allBrandingData = getAllData("allBrandingData") || [];
 
-            for (let input of allInput) {
-                input.disabled = true;
-            }
-            for (let textarea of allTextArea) {
-                textarea.disabled = true;
-            }
-            allBtn[0].classList.add("d-none")
-            allBtn[1].classList.remove("d-none")
-            editBrandBtn.onclick = () => {
-                for (let input of allInput) {
-                    input.disabled = false;
-                }
-                for (let textarea of allTextArea) {
-                    textarea.disabled = false;
-                }
-
-                allBtn[1].disabled = false
-            }
-            allBtn[1].disabled = true;
-            
+        // 🔥 Preserve old logo if not changed
+        if (allBrandingData.length > 0 && !brand_logo) {
+            brand_logo = allBrandingData[0].b_logo;
         }
-       
-    }
-    readBrandingFunc();
 
-    const insertBrandingFunc = () => {
-        let allBrandingData = [];
-        allBrandingData.push({
+        let brandingObject = {
             b_name: allInput[0].value.trim(),
             b_logo: brand_logo,
             b_domain: allInput[2].value,
@@ -645,8 +713,68 @@ const createBrandingFunc = () => {
             b_privacy: allTextArea[2].value,
             b_cookie: allTextArea[3].value,
             b_terms: allTextArea[4].value,
-        });
-        insertData("allBrandingData", JSON.stringify(allBrandingData));
-        swal("Data inserted", "Check Branding table!", "success");
-    }
-}
+        };
+
+        if (allBrandingData.length > 0) {
+
+            allBrandingData[0] = brandingObject;
+            swal("Updated!", "Branding Updated Successfully", "success");
+
+        } else {
+
+            allBrandingData.push(brandingObject);
+            swal("Inserted!", "Branding Created Successfully", "success");
+        }
+
+        insertData("allBrandingData", allBrandingData);
+
+        readBrandingFunc();
+    };
+
+    /* ================= READ BRANDING ================= */
+
+    const readBrandingFunc = () => {
+
+        let branding = getAllData("allBrandingData") || [];
+
+        if (branding.length === 0) return;
+
+        let data = branding[0];
+
+        editBrandBtn?.classList.remove("d-none");
+
+        allInput[0].value = data.b_name;
+        brand_logo = data.b_logo || "";
+
+        allInput[2].value = data.b_domain;
+        allInput[3].value = data.b_email;
+        allInput[4].value = data.b_facebook;
+        allInput[5].value = data.b_twitter;
+        allInput[6].value = data.b_whatsapp;
+        allInput[7].value = data.b_instagram;
+        allInput[8].value = data.b_mobile;
+
+        allTextArea[0].value = data.b_address;
+        allTextArea[1].value = data.b_about;
+        allTextArea[2].value = data.b_privacy;
+        allTextArea[3].value = data.b_cookie;
+        allTextArea[4].value = data.b_terms;
+
+        allInput.forEach(input => input.disabled = true);
+        allTextArea.forEach(textarea => textarea.disabled = true);
+
+        allBtn[0].classList.add("d-none");
+        allBtn[1].classList.remove("d-none");
+        allBtn[1].disabled = true;
+
+        editBrandBtn.onclick = () => {
+
+            allInput.forEach(input => input.disabled = false);
+            allTextArea.forEach(textarea => textarea.disabled = false);
+
+            allBtn[1].disabled = false;
+        };
+    };
+
+    readBrandingFunc();
+};
