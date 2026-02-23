@@ -1,0 +1,98 @@
+<div class="row animate__animated animate__slideInDown p-4">
+    <h3 class="fw-bold p-0">Header Showcase</h3>
+    <div class="col-md-12 d-flex bg-white position-relative showcase-preview shadow-sm p-4" style="height: 450px;">
+        <div class="title-box">
+            <h1 class="target">Title</h1>
+            <h4 class="target">Subtitle</h4>
+            <div class="title-button">
+            </div>
+        </div>
+        <div class="formatting-box">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="btn-group">
+                        <button class="btn btn-light">Color</button>
+                        <button class="btn btn-light">
+                            <input type="color" class="text-color">
+                        </button>
+                        <button class="btn btn-light">Size</button>
+                        <button class="btn btn-light">
+                            <input type="range" max="500" min="100" class="text-size form-control">
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="btn-group">
+                        <button class="btn btn-light">Text</button>
+                        <button class="btn btn-light">
+                            <input type="text " class=" btn-text form-control p-1">
+                        </button>
+                        <button class="btn btn-light">URL</button>
+                        <button class="btn btn-light">
+                            <input type="url" class=" btn-url form-control p-1">
+                        </button>
+                        <button class="btn btn-light">Size</button>
+                        <button class="btn btn-light">
+                            <select name="" class=" btn-size form-select" id="">
+                                <option value="16px">Small</option>
+                                <option value="20px">Medium</option>
+                                <option value="24px">Large</option>
+                            </select>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="btn-group">
+                        <button class="btn btn-light">BG</button>
+                        <button class="btn btn-light">
+                            <input type="color" class="btn-bg-color">
+                        </button>
+                        <button class="btn btn-light">Color</button>
+                        <button class="btn btn-light">
+                            <input type="color" class="btn-text-color">
+                        </button>
+                        <button class="btn btn-primary add-btn">
+                            Add
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-2 text-center p-2">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown">
+                            Alignment
+                        </button>
+                        <ul class="dropdown-menu">
+                            <span class="dropdown-item alignment " align-postition="h" align-value="flex-start">Left</span>
+                            <span class="dropdown-item alignment " align-postition="h" align-value="flex-end">Right</span>
+                            <span class="dropdown-item alignment " align-postition="h" align-value="center">Center</span>
+                            <span class="dropdown-item alignment " align-postition="v" align-value="flex-top">Top</span>
+                            <span class="dropdown-item alignment " align-postition="v" align-value="center">V-Center</span>
+                            <span class="dropdown-item alignment " align-postition="v" align-value="flex-end">Bottom</span>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="showcase-form">
+        <div class="row mt-3">
+            <div class="col-md-6 bg-white shadow-sm p-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Title Image (1920*680)</span>
+                    <input type="file" name="" class="form-control">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Title: <span class="max-length">&nbsp; 0 </span>/40 </span>
+                    <input type="text" name="" class="form-control" maxlength="40">
+                </div>
+            </div>
+            <div class="col-md-6 bg-white shadow-sm p-3 ">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Subtitle<span class="max-length">&nbsp;0</span>/100</span>
+                    <textarea class="form-control" maxlength="100"></textarea>
+                </div>
+                <button class="btn btn-primary mb-2 float-end add-showcase-btn ">Add Showcase</button>
+            </div>
+        </div>
+    </form>
+</div>

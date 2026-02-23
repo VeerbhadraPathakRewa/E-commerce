@@ -65,6 +65,9 @@ const dynamicAjaxFunc = (link) => {
         else if (link == "dynamic/branding_designe.html") {
             createBrandingFunc();
         }
+        else if (link == "dynamic/headershowcase_designe.html") {
+            createHeaderShowcaseFunc();
+        }
     }
 }
 //Start Create Category coding
@@ -778,3 +781,150 @@ const createBrandingFunc = () => {
 
     readBrandingFunc();
 };
+//create header showcase coding
+const createHeaderShowcaseFunc = () => {
+    let allHeaderShowcase = [];
+    allHeaderShowcase = getAllData("allHeaderShowcase");
+    let showcseForm = document.querySelector(".showcase-form");
+    let allInputEl = showcseForm.querySelectorAll("input");
+    let textareaEl = showcseForm.querySelector("textarea");
+    let maxLengthEl = showcseForm.querySelectorAll(".max-length");
+    let addshowcaseBtn = showcseForm.querySelector(".add-showcase-btn");
+    let showcasePreview = document.querySelector(".showcase-preview");
+    let titleBox = showcasePreview.querySelector(".title-box");
+    let titlebuttonBox = showcasePreview.querySelector(".title-button");
+    let textColorEl = showcasePreview.querySelector(".text-color");
+    let textSizeEl = showcasePreview.querySelector(".text-size");
+    let btnTextEl = showcasePreview.querySelector(".btn-text");
+    let btnUrlEl = showcasePreview.querySelector(".btn-url");
+    let btnBgColorlEl = showcasePreview.querySelector(".btn-bg-color");
+    let btnTextColorlEl = showcasePreview.querySelector(".btn-text-color");
+    let btnSizelEl = showcasePreview.querySelector(".btn-size");
+    let addBtn = showcasePreview.querySelector(".add-btn");
+    let targetEl = showcasePreview.querySelectorAll(".target");
+    let allAlignment = showcasePreview.querySelectorAll(".alignment");
+    //Updating Text and Subtitle
+    allInputEl[1].oninput = () => {
+
+        targetEl[0].innerHTML = allInputEl[1].value;
+        maxLengthEl[0].innerHTML = "&nbsp" + allInputEl[1].value.length;
+    }
+
+    textareaEl.oninput = () => {
+
+        targetEl[1].innerHTML = textareaEl.value;
+        maxLengthEl[1].innerHTML = "&nbsp" + textareaEl.value.length;
+    }
+    //Select title and subtitle color
+    for (let target of targetEl) {
+        target.onclick = () => {
+            for (let el of targetEl) {
+                el.style.border = "inherit"
+            }
+            target.style.border = "5px solid red";
+            textColorEl.oninput = () => {
+                target.style.color = textColorEl.value;
+            }
+            textSizeEl.oninput = () => {
+                target.style.fontSize = textSizeEl.value + "%";
+            }
+        }
+        target.ondblclick = () => {
+            target.style.border = "inherit"
+        }
+    }
+    //adding Buttons
+    addBtn.onclick = () => {
+        let btnLength = titlebuttonBox.querySelectorAll("button");
+        if (btnLength.length < 2) {
+
+            {
+                if (btnTextEl.value != "") {
+                    let button = document.createElement("button");
+                    button.className = "btn mx-2 mt-2";
+                    button.style.background = btnBgColorlEl.value
+                    let a = document.createElement("a");
+                    a.innerHTML = btnTextEl.value;
+                    a.style.color = btnTextColorlEl.value;
+                    a.style.fontSize = btnSizelEl.value;
+                    a.style.textDecoration = "none";
+                    a.href = btnUrlEl.value;
+                    button.append(a);
+                    titlebuttonBox.append(button);
+                }
+                else {
+                    swal("Please type text, choose  color & Size", "Selection  must!", "warning")
+                }
+            }
+
+        }
+        else {
+            swal("Only Two Buttons are allowed", "You can add only tow buttons", "warning")
+        }
+    }
+    //Upload image
+    allInputEl[0].onchange = () => {
+        let fReader = new FileReader();
+        fReader.readAsDataURL(allInputEl[0].files[0]);
+        let file = allInputEl[0].files[0];
+        if (file.size < 1000000) {
+            fReader.onload = (e) => {
+                let url = e.target.result;
+
+                let image = new Image();
+                image.src = url;
+                image.onload = () => {
+                    let o_height = image.height;
+                    let o_width = image.width;
+
+                    if (o_width == 1920 && o_height == 680) {
+                        image.style.width = "100%";
+                        image.style.top = "0";
+                        image.style.left = "0";
+                        showcasePreview.append(image);
+                    }
+                    else {
+                        swal("Please Upload Photo less then 1920*680", "1920*680 Image allowed", "warning")
+
+                    }
+
+                }
+
+            }
+        }
+        else {
+            swal("Please Upload Photo less then 1MB", "1MB Image allowed", "warning")
+        }
+
+    }
+    //alignment
+    for (let el of allAlignment) {
+        el.onclick = () => {
+            let alignPosition = el.getAttribute("align-postition");
+            let alignValue = el.getAttribute("align-value");
+            if (alignPosition == "h") {
+                showcasePreview.style.justifyContent = alignValue;
+            }
+            else if (alignPosition == "v") {
+                showcasePreview.style.alignItems = alignValue;
+            }
+
+        }
+    }
+    //Add showcase Coding
+    addshowcaseBtn.onclick = (e) => {
+        e.preventDefault();
+        if (allHeaderShowcase.length < 3) {
+            console.log(showcasePreview.innerHTML)
+            allHeaderShowcase.push({
+                slider: showcasePreview.innerHTML,
+            });
+            insertData("allHeaderShowcase", (allHeaderShowcase))
+            swal("Data inserted", "Slider Added", "success")
+        }else{
+            swal("Only Three Slider Allow", "Failed", "warning")
+
+        }
+
+    }
+}

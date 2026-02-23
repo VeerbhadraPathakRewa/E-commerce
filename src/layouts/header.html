@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap link -->
+    <link rel="stylesheet" href="common/css/bootstrap.min.css">
+    <script src="common/js/bootstrap.bundle.min.js"></script>
+    <!-- sweetalert link -->
+    <script src="common/js/sweetalert.min.js"></script>
+    <!-- Animate link  -->
+    <link rel="stylesheet" href="common/css/animate.min.css">
+    <!-- Fontawesome link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- link for custome CSS  -->
+    <link rel="stylesheet" href="css/index.css">
+    <title>Index Page</title>
+</head>
+
+<body>
+    <!-- Navbar elements -->
+    <div class="navbar-box">
+
+    </div>
+
+    <!-- Main page Elements  -->
+    <div class="container bg-white p-4 shadow-lg mb-4" style="margin-top: 70px;">
+
+    </div>
+    <!-- Footer Elements -->
+
+    <div class="footer-box">
+
+    </div>
+
+    <!-- custome script Coding -->
+    <script src="common/js/common.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/dynamic.js"></script>
+    <script>
+        const navbarBox = document.querySelector(".navbar-box")
+        const footerBox = document.querySelector(".footer-box")
+        dynamicRequest(navbarBox, "Pages/nav.html")
+        dynamicRequest(footerBox, "Pages/footer.html")
+    </script>
+</body>
+
+</html>

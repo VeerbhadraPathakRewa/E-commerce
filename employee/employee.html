@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,14 +20,28 @@
 </head>
 
 <body>
-    <div class="contaner-fluid">
+    <div class="container-fluid">
         <div class="side-nav side-nav-open">
             <button access-link="dynamic/branding_designe.html"
-                class="active bg-transparent border-0 collapse-item text-white fw-bold w-100" style="font-size: 20px ;">
+                class="bg-transparent border-0 collapse-item text-white fw-bold w-100" style="font-size: 20px ;">
                 <i class=" fa fa-image float-start mt-2"></i>
                 Branding Details
             </button>
-
+            <button class="bg-transparent border-0 collapse-btn text-white fw-bold w-100" style="font-size: 20px ;">
+                <i class="fa fa-shopping-home float-start mt-2"></i>
+                H page Design
+                <i class=" fa fa-angle-down float-end mt-2"></i>
+            </button>
+            <ul class="collapse show">
+                <li access-link="dynamic/headershowcase_designe.html"
+                    class=" collapse-item list-group-item border-0 border-start text-white bg-transparent">
+                    Header Showcase
+                </li>
+                <li access-link="dynamic/categoryshowcase_designe.html"
+                    class=" active collapse-item list-group-item border-0 border-start text-white bg-transparent">
+                    Category Showcase
+                </li>
+            </ul>
             <button class="bg-transparent border-0 collapse-btn text-white fw-bold w-100" style="font-size: 20px ;">
                 <i class=" fa fa-shopping-cart float-start mt-2"></i>
                 Stock Update
@@ -41,7 +54,7 @@
                 </li>
                 <li access-link="dynamic/brand_designe.html"
                     class="  collapse-item list-group-item border-0 border-start text-white bg-transparent">
-                    Create Brandss
+                    Create Brands
                 </li>
                 <li access-link="dynamic/product_designe.html"
                     class=" collapse-item list-group-item border-0 border-start text-white bg-transparent">
@@ -50,18 +63,15 @@
             </ul>
         </div>
     </div>
-
     <!-- nav min,max button -->
     <nav class="navbar bg-white">
         <button class="btn toggler-btn">
             <i class="fa fa-align-left"></i>
         </button>
     </nav>
-
     <div class="page page-open">
+
     </div>
-
-
     <!-- Custom Script Coding -->
     <script>
         const togglerFunc = () => {
@@ -89,5 +99,4 @@
     <script src="../employee/js/employee.js"></script>
     <script src="../common/js/common.js"></script>
 </body>
-
 </html>
