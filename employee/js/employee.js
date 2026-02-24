@@ -68,6 +68,9 @@ const dynamicAjaxFunc = (link) => {
         else if (link == "dynamic/headershowcase_designe.html") {
             createHeaderShowcaseFunc();
         }
+        else if (link == "dynamic/categoryshowcase_designe.html") {
+            createCShowcse();
+        }
     }
 }
 //Start Create Category coding
@@ -921,10 +924,84 @@ const createHeaderShowcaseFunc = () => {
             });
             insertData("allHeaderShowcase", (allHeaderShowcase))
             swal("Data inserted", "Slider Added", "success")
-        }else{
+        } else {
             swal("Only Three Slider Allow", "Failed", "warning")
 
         }
 
+    }
+}
+//Creaet Showcase category codeing
+const createCShowcse = () => {
+    let allShowcaseData = [];
+    let url = "";
+    allShowcaseData = getAllData("allShowcaseData")
+    let showcaseCategory = document.querySelector(".showcase-category");
+    let allUploadBtn = showcaseCategory.querySelectorAll(".upload-btn");
+    let allImg = showcaseCategory.querySelectorAll("img");
+    //dynamic Reading Category Photo
+    for (let upload of allUploadBtn) {
+        upload.onchange = () => {
+            let parent = upload.parentElement.parentElement.parentElement;
+            let imgTag = parent.querySelector("img")
+            let setBtn = parent.querySelector(".set-btn")
+            let inputEl = parent.querySelectorAll("input")[1]
+            let dPicWidth = imgTag.naturalWidth;
+            let dPicHeight = imgTag.naturalHeight;
+            let fReader = new FileReader();
+            fReader.onload = (e) => {
+                url = e.target.result;
+                let image = new Image();
+                image.src = url;
+                image.onload = () => {
+                    let o_width = image.width;
+                    let o_height = image.height;
+                    if (o_width == dPicWidth && o_height == dPicHeight) {
+                        imgTag.src = url;
+                        setBtn.onclick = () => {
+                            let imgDir = setBtn.getAttribute("img-dir");
+                            if (inputEl.value != "") {
+                                let direction = allShowcaseData.find((data) => data.direction==imgDir);
+                                if (direction == undefined) {
+                                    allShowcaseData.push({
+                                        image: url,
+                                        direction: imgDir,
+                                        label: inputEl.value.trim()
+                                    });
+                                    insertData("allShowcaseData", allShowcaseData);
+                                    swal("Data inserted", "Saved", "success");
+                                }
+                                else {
+                                    let indexNo = allShowcaseData.findIndex ((data)=> data.direction==imgDir)
+                                    console.log(indexNo)
+                                    allShowcaseData[indexNo]={
+                                        image: url,
+                                        direction: imgDir,
+                                        label: inputEl.value.trim()
+                                    }
+                                    insertData("allShowcaseData" , allShowcaseData);
+                                    swal("Data inserted","Date Saved","success");
+                                }
+                                setBtn.parentElement.classList.add("d-none")
+                            }
+                            else {
+                                swal("Input field is empty!", "Fill the field", "warning")
+                            }
+                        }
+                    }
+                    else {
+                        swal(`Please Upload ${dPicWidth}/${dPicHeight}`, "Please upload perfect size image", "warning");
+                    }
+                }
+            }
+            fReader.readAsDataURL(upload.files[0]);
+        }
+    }
+    for(let img of allImg){
+        img.ondblclick=()=>{
+            let parent = img.parentElement;
+          let element = parent.querySelector(".shadow-sm");
+          element.classList.toggle("d-none")
+        }
     }
 }
