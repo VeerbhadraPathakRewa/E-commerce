@@ -26,9 +26,12 @@ const dynamicNavbarFunc = () => {
 
     }
     dynamicBox.innerHTML += `
-                <div class="btn-group">
+     <div class="btn-group">
                     <button class="btn">
                         <i class="fa fa-shopping-cart"></i>
+                        <div style="position: absolute; top: -10px; left: 20px;width: 25px;height: 25px;border-radius:25%; background-color: red; color: white;">
+                            <span class="count-cart">0</span>
+                        </div>
                     </button>
                     <button class="btn">
                         <i class="fa fa-search"></i>
@@ -42,10 +45,11 @@ const dynamicNavbarFunc = () => {
                         </ul>
                     </div>
 
-                </div>`;
+                </div>            
+    
+    `;
     brandLogo.src = braindingData[0].b_logo;
     brandName.innerHTML = braindingData[0].b_name;
-
     //User dropdown menu
     let menuBox = document.querySelector(".menu-box")
     if (localStorage.getItem("__au__") != null) {
@@ -72,8 +76,7 @@ const dynamicNavbarFunc = () => {
 
 
     }
-
-
+    countCart();
 }
 const createFooterFunc = () => {
 
@@ -110,4 +113,52 @@ const dynamicRequest = (element, pageRequest) => {
         element.innerHTML = ajax.response;
 
     }
+}
+//add to cart coding
+const addToCart = () => {
+    let allCartProductData = [];
+    allCartProductData = getAllData("allCartProductData");
+    let allProductData = getAllData("allProductData");
+    let allCartBtn = document.querySelectorAll(".cart-btn");
+    for (let btn of allCartBtn) {
+        btn.onclick = () => {
+            if (localStorage.getItem("__au__") != null) {
+                let username = localStorage.getItem("__au__");
+                let index = btn.getAttribute("index");
+                let cartProduct = allProductData[index];
+                cartProduct["product_id"] = index;
+                cartProduct["username"] = username;
+
+                let checkProduct = allCartProductData.find((data) => {
+                    return data.product_id == index && data.username == username;
+                });
+                if (checkProduct == undefined) {
+                    allCartProductData.push(cartProduct);
+                    insertData("allCartProductData", (allCartProductData))
+                    swal("Cart Added!", "Please check on Cart", "success");
+                    countCart();
+                }
+                else {
+                    swal("Already in cart", "Please Check you Cart", "warning");
+                }
+
+                console.log(checkProduct);
+            }
+            else {
+                window.location = "http://localhost/e-commerce/Pages/login.html";
+            }
+        }
+    }
+}
+
+const countCart = () => {
+    let countCartEl = document.querySelector(".count-cart")
+    let allCartProductData = getAllData("allCartProductData");
+    if (localStorage.getItem("__au__") != null) {
+        let username = localStorage.getItem("__au__")
+        let filterCart = allCartProductData.filter((data) => data.username == username)
+        countCartEl.innerHTML = filterCart.length;
+    }
+
+
 }

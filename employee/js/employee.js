@@ -19,10 +19,12 @@ let brand_logo = "";
 
 //Start Collaps Codding
 const collapsFunc = () => {
-    let collapseBtn = document.querySelector(".collapse-btn");
-    collapseBtn.onclick = function () {
-        const ul = this.nextElementSibling;
-        ul.classList.toggle("show");
+    let collapseBtn = document.querySelectorAll(".collapse-btn");
+    for (let collapse of collapseBtn) {
+        collapse.onclick = function () {
+            const ul = this.nextElementSibling;
+            ul.classList.toggle("show");
+        }
     }
 }
 //Dynamic Request coding
@@ -70,6 +72,9 @@ const dynamicAjaxFunc = (link) => {
         }
         else if (link == "dynamic/categoryshowcase_designe.html") {
             createCShowcse();
+        }
+        else if (link == "dynamic/deliveryman_designe.html") {
+            createDeliveryManfunct();
         }
     }
 }
@@ -786,6 +791,7 @@ const createBrandingFunc = () => {
 };
 //create header showcase coding
 const createHeaderShowcaseFunc = () => {
+    let url = "";
     let allHeaderShowcase = [];
     allHeaderShowcase = getAllData("allHeaderShowcase");
     let showcseForm = document.querySelector(".showcase-form");
@@ -872,7 +878,7 @@ const createHeaderShowcaseFunc = () => {
         let file = allInputEl[0].files[0];
         if (file.size < 1000000) {
             fReader.onload = (e) => {
-                let url = e.target.result;
+                url = e.target.result;
 
                 let image = new Image();
                 image.src = url;
@@ -917,10 +923,34 @@ const createHeaderShowcaseFunc = () => {
     //Add showcase Coding
     addshowcaseBtn.onclick = (e) => {
         e.preventDefault();
+        let titleSize = "";
+        let titleColor = "";
+        targetEl[0].style.fontSize == "" ? titleSize = "300%" : titleSize = targetEl[0].style.fontSize
+        targetEl[0].style.color == "" ? titleColor = "black" : titleColor = targetEl[0].style.color
+
+        let subTitleSize = "";
+        let subTitleColor = "";
+        targetEl[1].style.fontSize == "" ? subTitleSize = "200%" : subTitleSize = targetEl[1].style.fontSize
+        targetEl[1].style.color == "" ? subTitleColor = "black" : subTitleColor = targetEl[1].style.color
+
+        let v_align = "";
+        let h_align = "";
+        showcasePreview.style.justifyContent == "" ? v_align = "flex-start" : v_align = showcasePreview.style.justifyContent
+        showcasePreview.style.alignItems == "" ? h_align = "flex-start" : h_align = showcasePreview.style.alignItems
+
         if (allHeaderShowcase.length < 3) {
             console.log(showcasePreview.innerHTML)
             allHeaderShowcase.push({
-                slider: showcasePreview.innerHTML,
+                titleSize: titleSize,
+                titleColor: titleColor,
+                subTitleSize: subTitleSize,
+                subTitleColor: subTitleColor,
+                titleText: targetEl[0].innerHTML,
+                subTitleText: targetEl[1].innerHTML,
+                h_align: h_align,
+                v_align: v_align,
+                titleImage: url == "" ? "common/images/a.png" : url,
+                button: titlebuttonBox.innerHTML.trim(),
             });
             insertData("allHeaderShowcase", (allHeaderShowcase))
             swal("Data inserted", "Slider Added", "success")
@@ -937,6 +967,202 @@ const createCShowcse = () => {
     let url = "";
     allShowcaseData = getAllData("allShowcaseData")
     let showcaseCategory = document.querySelector(".showcase-category");
+    //readding showcase form localstorage
+    if (allShowcaseData.length > 0) {
+        const allshowcaseData = getAllData("allShowcaseData");
+        console.log(allshowcaseData)
+        let categoryList = document.querySelector(".category-list");
+        let tLeftImg = "common/images/a.png";
+        let tLeftLabel = "";
+
+        let bLeftImg = "common/images/a.png";
+        let bLeftLabel = "";
+
+        let centerImg = "common/images/a.png";
+        let centerLabel = "";
+
+        let bRightImg = "common/images/a.png";
+        let bRightLabel = "";
+
+        let tRightImg = "common/images/a.png";
+        let tRightLabel = "";
+
+        let i;
+        for (i = 0; i < allshowcaseData.length; i++) {
+            if (allshowcaseData[i].direction == "top-left") {
+                tLeftImg = allshowcaseData[i].image;
+                tLeftLabel = allshowcaseData[i].label;
+            }
+            else if (allshowcaseData[i].direction == "bottom-left") {
+                bLeftImg = allshowcaseData[i].image;
+                bLeftLabel = allshowcaseData[i].label;
+            }
+            else if (allshowcaseData[i].direction == "center") {
+                centerImg = allshowcaseData[i].image;
+                centerLabel = allshowcaseData[i].label;
+            }
+            else if (allshowcaseData[i].direction == "top-right") {
+                tRightImg = allshowcaseData[i].image;
+                tRightLabel = allshowcaseData[i].label;
+            }
+            else if (allshowcaseData[i].direction == "bottom-right") {
+                bRightImg = allshowcaseData[i].image;
+                bRightLabel = allshowcaseData[i].label;
+            }
+        }
+        showcaseCategory.innerHTML = `
+        
+            <div class="col-md-4">
+                    <div class="posistion-relative mb-3">
+                        <div class="shadow-sm d-flex d-none p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2 " value="${tLeftLabel}"  name="" id="">
+                            <button class="btn btn-dark set-btn" img-dir="top-left">Set</button>
+                        </div>
+                        <img src="${tLeftImg}" alt="image Not found">
+                    </div>
+                    <div class="posistion-relative mb-3">
+                        <div class="shadow-sm d-none d-flex p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2" value="${bLeftLabel}" name="" id="">
+                            <button class="btn btn-dark set-btn" img-dir="bottom-left">Set</button>
+                        </div>
+                        <img src="${bLeftImg}" alt="image Not found">
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <div class="posistion-relative mb-3">
+                        <div class="shadow-sm d-flex d-none p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2" value="${centerLabel}" name="" id="">
+                            <button class="btn btn-dark set-btn" img-dir="center">Set</button>
+                        </div>
+                        <img src="${centerImg}" alt="image Not found">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="posistion-relative mb-3">
+
+                        <div class="shadow-sm d-flex d-none p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2" value="${tRightLabel}" name="" id="">
+                            <button class="btn btn-dark set-btn" img-dir="top-right">Set</button>
+                        </div>
+                        <img src="${tRightImg}" alt="image Not found">
+                    </div>
+                    <div class="posistion-relative mb-3">
+                        <div class="shadow-sm d-flex d-none p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2" value="${bRightLabel}" name="" id="">
+                            <button class="btn btn-dark set-btn"img-dir="bottom-right">Set</button>
+                        </div>
+                        <img src="${bRightImg}" alt="image Not found">
+                    </div>
+                </div>
+
+
+        `;
+    }
+    else {
+        showcaseCategory.innerHTML = `
+        
+                <div class="col-md-4">
+                    <div class="posistion-relative mb-3">
+                        <div class="shadow-sm d-flex p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2 "   name="" id="">
+                            <button class="btn btn-dark set-btn" img-dir="top-left">Set</button>
+                        </div>
+                        <img src="../common/images/A.jpg" alt="image Not found">
+                    </div>
+                    <div class="posistion-relative mb-3">
+                        <div class="shadow-sm d-flex p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2" name="" id="">
+                            <button class="btn btn-dark set-btn" img-dir="bottom-left">Set</button>
+                        </div>
+                        <img src="../common/images/A.jpg" alt="image Not found">
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <div class="posistion-relative mb-3">
+                        <div class="shadow-sm d-flex p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2" name="" id="">
+                            <button class="btn btn-dark set-btn" img-dir="center">Set</button>
+                        </div>
+                        <img src="../common/images/B.jpg" alt="image Not found">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="posistion-relative mb-3">
+
+                        <div class="shadow-sm d-flex p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2" name="" id="">
+                            <button class="btn btn-dark set-btn" img-dir="top-right">Set</button>
+                        </div>
+                        <img src="../common/images/A.jpg" alt="image Not found">
+                    </div>
+                    <div class="posistion-relative mb-3">
+                        <div class="shadow-sm d-flex p-1" style="position: relative;top:46px; left:3px; width: 85%;">
+                            <button class="btn-dark">
+                                <i class="fa fa-upload"></i>
+                                <input type="file" class="form-control upload-btn"
+                                    style="width: 50px; height: 50px; position: absolute; left:0; top: 0; opacity: 0; ">
+                            </button>
+                            <input type="text" class="form-control mx-2" name="" id="">
+                            <button class="btn btn-dark set-btn"img-dir="bottom-right">Set</button>
+                        </div>
+                        <img src="../common/images/A.jpg" alt="image Not found">
+                    </div>
+                </div>
+                `;
+    }
     let allUploadBtn = showcaseCategory.querySelectorAll(".upload-btn");
     let allImg = showcaseCategory.querySelectorAll("img");
     //dynamic Reading Category Photo
@@ -961,7 +1187,7 @@ const createCShowcse = () => {
                         setBtn.onclick = () => {
                             let imgDir = setBtn.getAttribute("img-dir");
                             if (inputEl.value != "") {
-                                let direction = allShowcaseData.find((data) => data.direction==imgDir);
+                                let direction = allShowcaseData.find((data) => data.direction == imgDir);
                                 if (direction == undefined) {
                                     allShowcaseData.push({
                                         image: url,
@@ -972,15 +1198,15 @@ const createCShowcse = () => {
                                     swal("Data inserted", "Saved", "success");
                                 }
                                 else {
-                                    let indexNo = allShowcaseData.findIndex ((data)=> data.direction==imgDir)
+                                    let indexNo = allShowcaseData.findIndex((data) => data.direction == imgDir)
                                     console.log(indexNo)
-                                    allShowcaseData[indexNo]={
+                                    allShowcaseData[indexNo] = {
                                         image: url,
                                         direction: imgDir,
                                         label: inputEl.value.trim()
                                     }
-                                    insertData("allShowcaseData" , allShowcaseData);
-                                    swal("Data inserted","Date Saved","success");
+                                    insertData("allShowcaseData", allShowcaseData);
+                                    swal("Data inserted", "Date Saved", "success");
                                 }
                                 setBtn.parentElement.classList.add("d-none")
                             }
@@ -997,11 +1223,44 @@ const createCShowcse = () => {
             fReader.readAsDataURL(upload.files[0]);
         }
     }
-    for(let img of allImg){
-        img.ondblclick=()=>{
+    for (let img of allImg) {
+        img.ondblclick = () => {
             let parent = img.parentElement;
-          let element = parent.querySelector(".shadow-sm");
-          element.classList.toggle("d-none")
+            let element = parent.querySelector(".shadow-sm");
+            element.classList.toggle("d-none")
         }
+    }
+}
+
+//Start set delevery man coding
+const createDeliveryManfunct = () => {
+    const signupForm = document.querySelector(".signup-form");
+    const allInput = signupForm.querySelectorAll("input");
+    const textarea = signupForm.querySelector("textarea");
+    let allRegistrationData = [];
+    allRegistrationData = getAllData('allRegistrationData');
+    signupForm.onsubmit = (e) => {
+        e.preventDefault();
+        let checkEmail = allRegistrationData.filter((data) =>
+            data.email == allInput[1].value);
+        if (checkEmail.length == 0) {
+            allRegistrationData.push({
+                fullname: allInput[0].value,
+                email: allInput[1].value,
+                password: allInput[2].value,
+                mobile: allInput[3].value,
+                state: allInput[4].value,
+                contry: allInput[5].value,
+                pincode: allInput[6].value,
+                address: textarea.value,
+                type: "postman",
+            });
+            insertData("allRegistrationData", allRegistrationData);
+            swal("Data Inserted", "Please Login", "success")
+        }
+        else {
+            swal("User Already exists!", "Please Login", "warning")
+        }
+
     }
 }

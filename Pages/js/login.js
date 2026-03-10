@@ -7,11 +7,21 @@ loginForm.onsubmit = (e) => {
     let email = allRegData.filter((data) => data.email == allInput[0].value);
     if (email != 0) {
         if (email[0].password == allInput[1].value) {
-            localStorage.setItem("__au__", allInput[0].value);
-            setTimeout(() => {
-                window.location = "../index.html";
-            }, 400);
-            swal("LogIn", "", "success");
+            if (email[0].type == "customer") {
+                localStorage.setItem("__au__", allInput[0].value);
+                setTimeout(() => {
+                    window.location = "http://localhost/e-commerce/";
+                }, 400);
+                swal("LogIn", "", "success");
+            }
+            else {
+                localStorage.setItem("__au__", allInput[0].value);
+                setTimeout(() => {
+                    window.location = "http://localhost/e-commerce/Pages/postman.html";
+                }, 400);
+                swal("LogIn", "", "success");
+            }
+
         } else {
             swal("Please Enter corrent Password", "", "warning")
         }

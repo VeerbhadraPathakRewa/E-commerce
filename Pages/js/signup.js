@@ -7,8 +7,6 @@ signupForm.onsubmit = (e) => {
     e.preventDefault();
     let checkEmail = allRegistrationData.filter((data) =>
         data.email == allInput[1].value);
-    console.log(checkEmail);
-    return false
     if (checkEmail.length == 0) {
         allRegistrationData.push({
             fullname: allInput[0].value,
@@ -18,7 +16,8 @@ signupForm.onsubmit = (e) => {
             state: allInput[4].value,
             contry: allInput[5].value,
             pincode: allInput[6].value,
-            address: textarea.valu
+            address: textarea.value,
+            type: "customer",
         });
         insertData("allRegistrationData", allRegistrationData);
         swal("Data Inserted", "Please Login", "success")

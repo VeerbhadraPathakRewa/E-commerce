@@ -27,11 +27,17 @@
     </div>
 
     <!-- Main page Elements  -->
-    <div class="container bg-white p-4 shadow-lg  mb-4" style="margin-top: 70px;">
-        <h3 class="text-center fw-bold mb-3">About As</h3>
-        <hr>
-        <div class="about-box">
+    <div class="container bg-white p-4 shadow-lg mb-4 " style="margin-top: 90px;">
+        <div class="relation-box">
 
+        </div>
+        <div class="row border p-4">
+            <div class="col-md-6 d-flex img-box">
+
+            </div>
+            <div class="col-md-6 details-box">
+                
+            </div>
         </div>
     </div>
     <!-- Footer Elements -->
@@ -43,6 +49,7 @@
     <!-- custome script Coding -->
     <script src="../common/js/common.js"></script>
     <script src="../js/dynamic.js"></script>
+    <script src="js/buy_prodcut.js"></script>
     <script>
         const navbarBox = document.querySelector(".navbar-box")
         const footerBox = document.querySelector(".footer-box")
@@ -50,7 +57,6 @@
 
         dynamicRequest(navbarBox, "nav.html")
         dynamicRequest(footerBox, "footer.html")
-        aboutbox.innerHTML = braindingData[0].b_about;
     </script>
 </body>
 
