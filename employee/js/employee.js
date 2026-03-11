@@ -27,6 +27,7 @@ const collapsFunc = () => {
         }
     }
 }
+
 //Dynamic Request coding
 const DynamicRequestFunc = () => {
     let activeEl = document.querySelector(".active");
@@ -72,6 +73,9 @@ const dynamicAjaxFunc = (link) => {
         }
         else if (link == "dynamic/categoryshowcase_designe.html") {
             createCShowcse();
+        }
+        else if (link == "dynamic/deliveryarea_designe.html") {
+            setDeleveryAreaFunc();
         }
         else if (link == "dynamic/deliveryman_designe.html") {
             createDeliveryManfunct();
@@ -789,6 +793,7 @@ const createBrandingFunc = () => {
 
     readBrandingFunc();
 };
+
 //create header showcase coding
 const createHeaderShowcaseFunc = () => {
     let url = "";
@@ -961,6 +966,7 @@ const createHeaderShowcaseFunc = () => {
 
     }
 }
+
 //Creaet Showcase category codeing
 const createCShowcse = () => {
     let allShowcaseData = [];
@@ -1229,6 +1235,109 @@ const createCShowcse = () => {
             let element = parent.querySelector(".shadow-sm");
             element.classList.toggle("d-none")
         }
+    }
+}
+
+// start create delevery area coding
+function setDeleveryAreaFunc(){
+    let allDeleveryData = [];
+    if(localStorage.getItem("allDeleveryData") != null)
+    {
+        allDeleveryData = JSON.parse(localStorage.getItem("allDeleveryData"));
+    }
+    var i,j,k;
+    var country_el = document.querySelector("#country");
+    var state_el = document.querySelector("#state");
+    var code_el = document.querySelector(".code");
+    var pincode_el = document.querySelector(".pincode");
+    var deleveryForm = document.querySelector(".delevery-form");
+    var city_el = document.querySelector("#city");
+    const ajax = new XMLHttpRequest();
+    ajax.open("POST","country.json",true);
+    ajax.send();
+
+    ajax.onload = function(){
+        const data = JSON.parse(this.response);
+        for(i=0;i<data.length;i++){
+            var option = `<option>${data[i].name}</option>`;
+            country_el.innerHTML += option;
+        }
+
+        country_el.onchange = function(){
+            for(i=0;i<data.length;i++)
+            {
+                if(this.value == "choose country")
+                {
+                    code_el.innerHTML = "+xx";
+                    state_el.innerHTML = "<option>choose country</option>";
+                }
+                else if(this.value == data[i].name)
+                {
+                    state_el.innerHTML = "";
+                    code_el.innerHTML = data[i].phone_code;
+                    for(j=0;j<data[i].states.length;j++)
+                    {
+                        var option = `<option>${data[i].states[j].name}</option>`;
+                        state_el.innerHTML += option;
+                    }
+                }
+            }
+        }
+
+        state_el.onchange = function(){
+            for(i=0;i<data.length;i++)
+            {
+                for(j=0;j<data[i].states.length;j++)
+                {
+                    if(this.value == "choose state")
+                    {
+                        city_el.innerHTML = "<option>choose city</option>";
+                    }
+                    else if(this.value == data[i].states[j].name)
+                    {
+                        city_el.innerHTML = "";
+                        for(k=0;k<data[i].states[j].cities.length;k++)
+                        {
+                            var option = `<option>${data[i].states[j].cities[k].name}</option>`;
+                            city_el.innerHTML += option;
+                        }
+                    }
+                }
+            }
+        }
+
+        city_el.onchange = () =>{
+            let city = city_el.value;
+            let ajax = new XMLHttpRequest();
+            ajax.open("GET","https://api.postalpincode.in/postoffice/"+city,true);
+            ajax.send();
+
+            // get response
+            ajax.onload = function()
+            {
+                let response = JSON.parse(ajax.response);
+                console.log(response);
+                let length = response[0].PostOffice.length-1;
+                pincode_el.value = response[0].PostOffice[length].Pincode;
+            }
+        }
+    }
+
+    deleveryForm.onsubmit = function(e){
+        e.preventDefault();
+        let allSelect = deleveryForm.querySelectorAll("select");
+        let allInput = deleveryForm.querySelectorAll("input");
+        allDeleveryData.push({
+            conutry : allSelect[0].value,
+            state : allSelect[1].value, 
+            city : allSelect[2].value,
+            payment_mode : allSelect[3].value,
+            pincode : allInput[0].value,
+            mobile : allInput[1].value,
+            days : allInput[2].value
+        });
+        insertData("allDeleveryData",allDeleveryData);
+        swal("Delevery Area Added","Check table","success");
     }
 }
 

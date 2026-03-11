@@ -8,10 +8,6 @@ setTimeout(() => {
 let braindingData = getAllData("allBrandingData")
 let regData = getAllData("allRegistrationData")
 
-
-
-
-
 //Creating Dynamic navbar
 const dynamicNavbarFunc = () => {
     let allCategory = getAllData("allcategoryData");
