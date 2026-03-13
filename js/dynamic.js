@@ -40,18 +40,17 @@ const dynamicNavbarFunc = () => {
                             
                         </ul>
                     </div>
-
                 </div>            
     
     `;
     brandLogo.src = braindingData[0].b_logo;
     brandName.innerHTML = braindingData[0].b_name;
-    //User dropdown menu
+    //control dropdown menu
     let menuBox = document.querySelector(".menu-box")
     if (localStorage.getItem("__au__") != null) {
         let email = localStorage.getItem("__au__");
         let currentData = regData.filter((data) => data.email == email);
-        menuBox.innerHTML = `<li><a href="#" class="drowpdown-item">
+        menuBox.innerHTML = `<li><a href="http://localhost/e-commerce/Pages/user-dashboard.html" class="drowpdown-item">
                                     <i class="fa fa-user"></i>${currentData[0].fullname}</a></li>
                             <li><a href="#" class="drowpdown-item logout-btn">
                                     <i class="fa-solid fa-right-from-bracket"></i>LogOut</a></li>`;

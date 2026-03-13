@@ -19,8 +19,8 @@ const showProduct = () => {
                     ${product.price}
                 </span>
                 <br>
-                <button index="${index}" class="cart-btn btn btn-danger mt-3"><i class="fa fa-shoping-cart"></i>Add to Cart</button>
-                <a href="http://localhost/e-commerce/Pages/buy_product.html?product_id=${index}" index="${index}" class="btn btn-primary mt-3"><i class="fa fa-shoping-bag"></i>Buy Now</a>
+                <button index="${index}" class="cart-btn btn btn-danger mt-3"><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button>
+                <a href="http://localhost/e-commerce/Pages/buy_product.html?product_id=${index}" index="${index}" class="btn btn-primary mt-3"><i class="fa fa-bag-shopping"></i>Buy Now</a>
             </div>`
 
     });
@@ -37,7 +37,7 @@ const showCategory = () => {
     let bLeftImg = "common/images/a.jpg";
     let bLeftLabel = "";
 
-    let centerImg = "common/images/a.jpg";
+    let centerImg = "common/images/b.jpg";
     let centerLabel = "";
 
     let bRightImg = "common/images/a.jpg";

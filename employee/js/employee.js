@@ -15,8 +15,6 @@ let right = "";
 let left = "";
 let brand_logo = "";
 
-
-
 //Start Collaps Codding
 const collapsFunc = () => {
     let collapseBtn = document.querySelectorAll(".collapse-btn");
@@ -79,6 +77,12 @@ const dynamicAjaxFunc = (link) => {
         }
         else if (link == "dynamic/deliveryman_designe.html") {
             createDeliveryManfunct();
+        }
+        else if (link == "dynamic/allorder_designe.html") {
+            allOrderDataFunc();
+        }
+        else if (link == "dynamic/alldeliver_designe.html") {
+            allDeliverDataFunc();
         }
     }
 }
@@ -978,19 +982,19 @@ const createCShowcse = () => {
         const allshowcaseData = getAllData("allShowcaseData");
         console.log(allshowcaseData)
         let categoryList = document.querySelector(".category-list");
-        let tLeftImg = "common/images/a.png";
+        let tLeftImg = "common/images/A.jpg";
         let tLeftLabel = "";
 
-        let bLeftImg = "common/images/a.png";
+        let bLeftImg = "common/images/A.jpg";
         let bLeftLabel = "";
 
-        let centerImg = "common/images/a.png";
+        let centerImg = "common/images/B.jpg";
         let centerLabel = "";
 
-        let bRightImg = "common/images/a.png";
+        let bRightImg = "common/images/A.jpg";
         let bRightLabel = "";
 
-        let tRightImg = "common/images/a.png";
+        let tRightImg = "common/images/A.jpg";
         let tRightLabel = "";
 
         let i;
@@ -1182,6 +1186,7 @@ const createCShowcse = () => {
             let dPicHeight = imgTag.naturalHeight;
             let fReader = new FileReader();
             fReader.onload = (e) => {
+                console.log(dPicHeight, dPicWidth)
                 url = e.target.result;
                 let image = new Image();
                 image.src = url;
@@ -1239,13 +1244,12 @@ const createCShowcse = () => {
 }
 
 // start create delevery area coding
-function setDeleveryAreaFunc(){
+function setDeleveryAreaFunc() {
     let allDeleveryData = [];
-    if(localStorage.getItem("allDeleveryData") != null)
-    {
+    if (localStorage.getItem("allDeleveryData") != null) {
         allDeleveryData = JSON.parse(localStorage.getItem("allDeleveryData"));
     }
-    var i,j,k;
+    var i, j, k;
     var country_el = document.querySelector("#country");
     var state_el = document.querySelector("#state");
     var code_el = document.querySelector(".code");
@@ -1253,30 +1257,26 @@ function setDeleveryAreaFunc(){
     var deleveryForm = document.querySelector(".delevery-form");
     var city_el = document.querySelector("#city");
     const ajax = new XMLHttpRequest();
-    ajax.open("POST","country.json",true);
+    ajax.open("POST", "country.json", true);
     ajax.send();
 
-    ajax.onload = function(){
+    ajax.onload = function () {
         const data = JSON.parse(this.response);
-        for(i=0;i<data.length;i++){
+        for (i = 0; i < data.length; i++) {
             var option = `<option>${data[i].name}</option>`;
             country_el.innerHTML += option;
         }
 
-        country_el.onchange = function(){
-            for(i=0;i<data.length;i++)
-            {
-                if(this.value == "choose country")
-                {
+        country_el.onchange = function () {
+            for (i = 0; i < data.length; i++) {
+                if (this.value == "choose country") {
                     code_el.innerHTML = "+xx";
                     state_el.innerHTML = "<option>choose country</option>";
                 }
-                else if(this.value == data[i].name)
-                {
+                else if (this.value == data[i].name) {
                     state_el.innerHTML = "";
                     code_el.innerHTML = data[i].phone_code;
-                    for(j=0;j<data[i].states.length;j++)
-                    {
+                    for (j = 0; j < data[i].states.length; j++) {
                         var option = `<option>${data[i].states[j].name}</option>`;
                         state_el.innerHTML += option;
                     }
@@ -1284,20 +1284,15 @@ function setDeleveryAreaFunc(){
             }
         }
 
-        state_el.onchange = function(){
-            for(i=0;i<data.length;i++)
-            {
-                for(j=0;j<data[i].states.length;j++)
-                {
-                    if(this.value == "choose state")
-                    {
+        state_el.onchange = function () {
+            for (i = 0; i < data.length; i++) {
+                for (j = 0; j < data[i].states.length; j++) {
+                    if (this.value == "choose state") {
                         city_el.innerHTML = "<option>choose city</option>";
                     }
-                    else if(this.value == data[i].states[j].name)
-                    {
+                    else if (this.value == data[i].states[j].name) {
                         city_el.innerHTML = "";
-                        for(k=0;k<data[i].states[j].cities.length;k++)
-                        {
+                        for (k = 0; k < data[i].states[j].cities.length; k++) {
                             var option = `<option>${data[i].states[j].cities[k].name}</option>`;
                             city_el.innerHTML += option;
                         }
@@ -1306,38 +1301,37 @@ function setDeleveryAreaFunc(){
             }
         }
 
-        city_el.onchange = () =>{
+        city_el.onchange = () => {
             let city = city_el.value;
             let ajax = new XMLHttpRequest();
-            ajax.open("GET","https://api.postalpincode.in/postoffice/"+city,true);
+            ajax.open("GET", "https://api.postalpincode.in/postoffice/" + city, true);
             ajax.send();
 
             // get response
-            ajax.onload = function()
-            {
+            ajax.onload = function () {
                 let response = JSON.parse(ajax.response);
                 console.log(response);
-                let length = response[0].PostOffice.length-1;
+                let length = response[0].PostOffice.length - 1;
                 pincode_el.value = response[0].PostOffice[length].Pincode;
             }
         }
     }
 
-    deleveryForm.onsubmit = function(e){
+    deleveryForm.onsubmit = function (e) {
         e.preventDefault();
         let allSelect = deleveryForm.querySelectorAll("select");
         let allInput = deleveryForm.querySelectorAll("input");
         allDeleveryData.push({
-            conutry : allSelect[0].value,
-            state : allSelect[1].value, 
-            city : allSelect[2].value,
-            payment_mode : allSelect[3].value,
-            pincode : allInput[0].value,
-            mobile : allInput[1].value,
-            days : allInput[2].value
+            conutry: allSelect[0].value,
+            state: allSelect[1].value,
+            city: allSelect[2].value,
+            payment_mode: allSelect[3].value,
+            pincode: allInput[0].value,
+            mobile: allInput[1].value,
+            days: allInput[2].value
         });
-        insertData("allDeleveryData",allDeleveryData);
-        swal("Delevery Area Added","Check table","success");
+        insertData("allDeleveryData", allDeleveryData);
+        swal("Delevery Area Added", "Check table", "success");
     }
 }
 
@@ -1372,4 +1366,101 @@ const createDeliveryManfunct = () => {
         }
 
     }
+}
+//Start manage order codeing
+const allOrderDataFunc = () => {
+    showallOrder();
+}
+
+//formate date
+const formateDate = (dateStr) => {
+    let date = new Date(dateStr);
+    let dd = date.getDate()
+    dd < 10 ? dd = "0" + dd : dd;
+    let mm = date.getMonth() + 1;
+    mm < 10 ? mm = "0" + mm : mm;
+    let yy = date.getFullYear();
+    return dd + "-" + mm + "-" + yy + " " + date.toLocaleTimeString();
+}
+
+const showallOrder = () => {
+    let allOrderData = getAllData("allOrderData")
+    let allOrderList = document.querySelector(".all-order-list");
+    allOrderList.innerHTML = "";
+    allOrderData.forEach((data, index) => {
+        allOrderList.innerHTML += `
+    <tr>
+        <td class="text-nowrap">${index + 1}</td>
+        <td class="text-nowrap"><img src ="${data.productInfo.thumb}" width="30" class="rounded-circle"></td>
+        <td class="text-nowrap">${data.productInfo.title}</td>
+        <td class="text-nowrap">${data.qty}</td>
+        <td class="text-nowrap">${data.finalPrice}</td>
+        <td class="text-nowrap">${data.userinfo.address}</td>
+        <td class="text-nowrap">${data.userinfo.state}</td>
+        <td class="text-nowrap">${data.userinfo.contry}</td>
+        <td class="text-nowrap">${data.userinfo.pincode}</td>
+        <td class="text-nowrap">${formateDate(data.purchaseDate)}</td>
+        <td class="text-nowrap">${data.userinfo.fullname}</td>
+        <td class="text-nowrap">${data.userinfo.email}</td>
+        <td class="text-nowrap">${data.userinfo.mobile}</td>
+        <td class="text-nowrap">${data.otp}</td>
+        <td class="text-nowrap">
+        <button class="btn ${data.status == "Processing" ? "btn-primary" : "btn-danger"}">${data.status}
+        </button></td>
+        <td class="text-nowrap">
+        <button index="${index}" class="btn ${data.status == "Processing" ? "disabled" : "btn-primary"}  dispatch-btn">Dispatch
+        </button></td>
+    </tr>
+    
+    `;
+    })
+    let allDispatchBtn = allOrderList.querySelectorAll(".dispatch-btn");
+    for (btn of allDispatchBtn) {
+        btn.onclick =function () {
+            let index = this.getAttribute("index")
+            let currentProdcut = allOrderData[index];
+            currentProdcut["status"] = "Processing";
+            console.log(currentProdcut)
+            allOrderData[index] = currentProdcut;
+            insertData("allOrderData", allOrderData);
+            swal("Order dispatched", "Check Table", "success")
+            showallOrder();
+        }
+    }
+}
+
+//Manage all Deliver Data codeing
+const allDeliverDataFunc=()=>{
+    showalldeliver();
+}
+const showalldeliver = () => {
+    let allDeliverData = getAllData("allDeliverData")
+    let allDeliverList = document.querySelector(".all-deliver-list");
+    allDeliverData.innerHTML = "";
+    allDeliverData.forEach((data, index) => {
+        allDeliverList.innerHTML += `
+    <tr>
+        <td class="text-nowrap">${index + 1}</td>
+        <td class="text-nowrap"><img src ="${data.productInfo.thumb}" width="30" class="rounded-circle"></td>
+        <td class="text-nowrap">${data.productInfo.title}</td>
+        <td class="text-nowrap">${data.qty}</td>
+        <td class="text-nowrap">${data.finalPrice}</td>
+        <td class="text-nowrap">${data.userinfo.address}</td>
+        <td class="text-nowrap">${data.userinfo.state}</td>
+        <td class="text-nowrap">${data.userinfo.contry}</td>
+        <td class="text-nowrap">${data.userinfo.pincode}</td>
+        <td class="text-nowrap">${formateDate(data.purchaseDate)}</td>
+        <td class="text-nowrap">${data.userinfo.fullname}</td>
+        <td class="text-nowrap">${data.userinfo.email}</td>
+        <td class="text-nowrap">${data.userinfo.mobile}</td>
+        <td class="text-nowrap">${data.otp}</td>
+        <td class="text-nowrap">
+        <button class="btn ${data.status == "Processing" ? "btn-primary" : "btn-danger"}">${data.status}
+        </button></td>
+         
+    </tr>
+    
+    `;
+    })
+   
 }

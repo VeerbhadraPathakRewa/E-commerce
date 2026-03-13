@@ -17,7 +17,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- link for custome CSS  -->
 
-    <title>Postman</title>
+    <title>User DashBoard</title>
 </head>
 
 <body>
@@ -28,7 +28,38 @@
 
     <!-- Main page Elements  -->
     <div class="container bg-white p-4 shadow-lg  mb-4" style="margin-top: 70px;">
-        <h3 class="text-center fw-bold mb-3">Postman</h3>
+        <h3 class="text-center fw-bold mb-3">All Order Product</h3>
+        <hr>
+        <div class="row p-4 mb-5">
+            <div class="col-md-12 p-4 bg-white table-responsive">
+                <table class="table table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th class="text-nowrap">Sr</th>
+                            <th class="text-nowrap">Product</th>
+                            <th class="text-nowrap">Title</th>
+                            <th class="text-nowrap">Quantity</th>
+                            <th class="text-nowrap">Price</th>
+                            <th class="text-nowrap">Address</th>
+                            <th class="text-nowrap">State</th>
+                            <th class="text-nowrap">Country</th>
+                            <th class="text-nowrap">Pincode</th>
+                            <th class="text-nowrap">Purchase</th>
+                            <th class="text-nowrap">Name</th>
+                            <th class="text-nowrap">Username</th>
+                            <th class="text-nowrap">Mobile</th>
+                            <th class="text-nowrap">OTP</th>
+                            <th class="text-nowrap">Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="all-order-list">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <h3 class="text-center fw-bold mb-3">All Deliverd Product</h3>
         <hr>
         <div class="row p-4">
             <div class="col-md-12 p-4 bg-white table-responsive">
@@ -49,10 +80,10 @@
                             <th class="text-nowrap">Username</th>
                             <th class="text-nowrap">Mobile</th>
                             <th class="text-nowrap">Status</th>
-                            <th class="text-nowrap">Action</th>
+
                         </tr>
                     </thead>
-                    <tbody class="all-order-list">
+                    <tbody class="all-deliverd-list">
 
                     </tbody>
                 </table>
@@ -60,17 +91,7 @@
         </div>
     </div>
 
-    <div class="modal animate__animated animate__zoomIn" id="otp-modal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h4>Enter OTP</h4>
-                    <input type="text" class="form-control otp" >
-                    <button class="float-end deliver-btn btn btn-primary mb-3 mt-3">Deliever</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- Footer Elements -->
 
     <div class="footer-box">
@@ -80,7 +101,7 @@
     <!-- custome script Coding -->
     <script src="../common/js/common.js"></script>
     <script src="../js/dynamic.js"></script>
-    <script src="./js/postman.js"></script>
+    <script src="js/user-dashboard.js"></script>
     <script>
         const navbarBox = document.querySelector(".navbar-box")
         const footerBox = document.querySelector(".footer-box")

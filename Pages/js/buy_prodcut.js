@@ -1,6 +1,7 @@
 if (localStorage.getItem("__au__") != null) {
     let email = localStorage.getItem("__au__");
-
+    let allOrderData = [];
+    allOrderData = getAllData("allOrderData");
     let relationbox = document.querySelector(".relation-box")
     let imgbox = document.querySelector(".img-box")
     let detailsBox = document.querySelector(".details-box")
@@ -10,8 +11,9 @@ if (localStorage.getItem("__au__") != null) {
     let allRegistrationData = getAllData("allRegistrationData");
     let allDeleveryData = getAllData("allDeleveryData");
     let currentProduct = allProductData[id];
+    console.log(currentProduct)
     let userinfo = allRegistrationData.find((data) => data.email == email)
-    console.log(userinfo)
+
 
     relationbox.innerHTML += `
         <a href="#"></a>  ${currentProduct.category}
@@ -20,13 +22,13 @@ if (localStorage.getItem("__au__") != null) {
         `;
     imgbox.innerHTML = `
         <div class="w-25">
-            <img src="${currentProduct.front}" class="border mb-3 " width="100" height="100">
-            <img src="${currentProduct.back}" class="border mb-3 " width="100" height="100">
-            <img src="${currentProduct.left}" class="border mb-3 " width="100" height="100">
-            <img src="${currentProduct.right}" class="border mb-3 " width="100" height="100">
+            <img src="${currentProduct.front}" class="border s-img mb-3 " width="100" height="100">
+            <img src="${currentProduct.back}" class="border s-img mb-3 " width="100" height="100">
+            <img src="${currentProduct.left}" class="border s-img mb-3 " width="100" height="100">
+            <img src="${currentProduct.right}" class="border s-img mb-3 " width="100" height="100">
         </div>
         <div class ="w-75 d-flex justify-content-center align-items-center ">
-            <img src="${currentProduct.thumb}" class="border mb-3 " width="80%">
+            <img src="${currentProduct.thumb}" class="border mb-3 p-img " width="80%">
         </div>  
         `;
     detailsBox.innerHTML = `
@@ -40,22 +42,22 @@ if (localStorage.getItem("__au__") != null) {
     </h5><br>
     <h5>
     Quantity <br>
-    <input type="number" class="w-25 form-control" >
+    <input type="number" required class="w-25 form-control qty " >
     </h5><br>
    
    <div class="pay-mode">
     <h5>
     Payment Mode <br>
-    <input type="radio" value="online" name="pay-mode" > <span>&nbsp; Online</span>
-    <input type="radio" value="cod" name="pay-mode" ><span>&nbsp; Cash on Dilevery</span>
+    <input type="radio" value="online" name="pay-mode" > <span>&nbsp; Online &nbsp;&nbsp;</span>
+    <input type="radio" value="cod" name="pay-mode"><span>&nbsp; Cash on Dilevery</span>
     </h5>
     </div><br>
 
     <button class="btn btn-primary buy-btn">
-    <i class="fa fa-shoping-bag"></i> Buy Now 
+    <i class="fa fa-bag-shopping"></i> Buy Now 
     </button>
     <button class="btn btn-danger cart-btn">
-    <i class="fa fa-shoping-cart"></i>Add to Cart
+    <i class="fa fa-cart-shopping"></i>Add to Cart
     </button>
     <h5><br>
     Check Product Availibilty </h5>
@@ -68,12 +70,16 @@ if (localStorage.getItem("__au__") != null) {
     </div>
     `;
 
+    let allSImg = imgbox.querySelectorAll(".s-img");
+    let pImg = imgbox.querySelector(".p-img");
     let pinCodeEl = detailsBox.querySelector(".pincode");
     let checkMsg = detailsBox.querySelector(".area-msg");
     let checkBtn = detailsBox.querySelector(".check-btn");
     let buyBtn = detailsBox.querySelector(".buy-btn");
     let payMode = detailsBox.querySelector(".pay-mode");
-    let allInput = detailsBox.querySelectorAll("input");
+    let qtyEl = detailsBox.querySelector(".qty");
+    let allInput = payMode.querySelectorAll("input");
+
     //Check Delevery area
     let checkArea = allDeleveryData.find((data) => {
         return data.pincode == userinfo.pincode;
@@ -106,6 +112,60 @@ if (localStorage.getItem("__au__") != null) {
             checkMsg.innerHTML = checkPin.days
             checkMsg.className = "text-success"
         }
+    }
+
+    //Preview images
+    for (let img of allSImg) {
+        img.onclick = () => {
+            let src = img.src;
+            pImg.src = src;
+            pImg.className = "p-img animate__animated animate__zoomIn";
+            setTimeout(() => {
+                pImg.className = "p-img";
+
+            }, 500)
+        }
+    }
+    //Place order codeing
+    buyBtn.onclick = () => {
+
+        let value;
+        let otp = Math.floor(Math.random() * 456123);
+        let finalPrice = qtyEl.value * currentProduct.price;
+        let updatedQty = currentProduct.quantity - qtyEl.value;
+
+        for (let input of allInput) {
+            if (input.checked) {
+                value = input.value;
+            }
+        }
+        if (value != undefined) {
+            if (value == "cod") {
+                currentProduct["quantity"] = updatedQty;
+                allProductData[id] = currentProduct;
+                allOrderData.unshift({
+                    productInfo: currentProduct,
+                    userinfo: userinfo,
+                    qty: qtyEl.value,
+                    finalPrice: finalPrice,
+                    paymentMod: value,
+                    otp: otp,
+                    purchaseDate: new Date(),
+                    productId: id,
+                    status: "Order Placed",
+                });
+                insertData("allOrderData", allOrderData);
+                insertData("allProductData", allProductData);
+                swal("Order Placed", "Check order on Profile", "success")
+            }
+            else {
+                swal("Online not accepted", "Choose Cash on Delivery", "warning")
+            }
+        }
+        else {
+            swal("Select Payment Mode", "Select mode", "warining");
+        }
+
     }
 
 }
