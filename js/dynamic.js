@@ -23,12 +23,12 @@ const dynamicNavbarFunc = () => {
     }
     dynamicBox.innerHTML += `
      <div class="btn-group">
-                    <button class="btn">
+                    <a href="http://localhost/e-commerce/Pages/cart.html" class="btn">
                         <i class="fa fa-shopping-cart"></i>
                         <div style="position: absolute; top: -10px; left: 20px;width: 25px;height: 25px;border-radius:25%; background-color: red; color: white;">
                             <span class="count-cart">0</span>
                         </div>
-                    </button>
+                    </a>
                     <button class="btn">
                         <i class="fa fa-search"></i>
                     </button>

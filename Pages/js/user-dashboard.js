@@ -44,7 +44,10 @@ const showallOrder = (allData, element, username) => {
         </button></td>
         <td class="text-nowrap">
         <button index="${index}" class="cancel-btn btn btn-primary ${data.isCancel ? "d-none" : ""}">Cancel
-        </button></td>
+        </button>
+        <a href="http://localhost/e-commerce/Pages/buy_product.html?product_id=${data.productId}" class="cancel-btn btn btn-danger">View
+        </a>
+        </td>
         
     </tr>
     `;

@@ -2,18 +2,16 @@ if (localStorage.getItem("__au__") != null) {
     let email = localStorage.getItem("__au__");
     let allOrderData = [];
     allOrderData = getAllData("allOrderData");
-    let relationbox = document.querySelector(".relation-box")
-    let imgbox = document.querySelector(".img-box")
-    let detailsBox = document.querySelector(".details-box")
-    let url = location.href
+    let relationbox = document.querySelector(".relation-box");
+    let imgbox = document.querySelector(".img-box");
+    let detailsBox = document.querySelector(".details-box");
+    let url = location.href;
     let id = url.split("=")[1];
     let allProductData = getAllData("allProductData");
     let allRegistrationData = getAllData("allRegistrationData");
     let allDeleveryData = getAllData("allDeleveryData");
     let currentProduct = allProductData[id];
-    let userinfo = allRegistrationData.find((data) => data.email == email)
-
-
+    let userinfo = allRegistrationData.find((data) => data.email == email);
     relationbox.innerHTML += `
         <a href="#"></a>  ${currentProduct.category}
         <a href="#"></a> >> ${currentProduct.brand}
@@ -173,14 +171,13 @@ if (localStorage.getItem("__au__") != null) {
     //Check Product quatity
     qtyEl.oninput = function () {
         if (this.value > currentProduct.quantity) {
-            console.log(this.value)
             swal("Out of stock", "Decrease quantity", "warning");
             this.value = currentProduct.quantity;
         }
     }
     if (currentProduct.quantity == 0) {
-        buyBtn.innerHTML = "Out of Stock"
-        buyBtn.className = "btn-danger btn"
+        buyBtn.innerHTML = "Out of Stock";
+        buyBtn.className = "btn-danger btn";
         buyBtn.disabled = true;
     }
     else if (currentProduct.quantity == 5) {
