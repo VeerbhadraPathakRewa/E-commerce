@@ -11,7 +11,6 @@ if (localStorage.getItem("__au__") != null) {
     let allRegistrationData = getAllData("allRegistrationData");
     let allDeleveryData = getAllData("allDeleveryData");
     let currentProduct = allProductData[id];
-    console.log(currentProduct)
     let userinfo = allRegistrationData.find((data) => data.email == email)
 
 
@@ -42,7 +41,9 @@ if (localStorage.getItem("__au__") != null) {
     </h5><br>
     <h5>
     Quantity <br>
-    <input type="number" required class="w-25 form-control qty " >
+    <div class=" d-flex align-items-center">
+    <input type="number" min="1" value="1"  required class="w-25 form-control qty " > &nbsp; &nbsp;<span class="qty-msg"></span>
+</div>
     </h5><br>
    
    <div class="pay-mode">
@@ -78,6 +79,7 @@ if (localStorage.getItem("__au__") != null) {
     let buyBtn = detailsBox.querySelector(".buy-btn");
     let payMode = detailsBox.querySelector(".pay-mode");
     let qtyEl = detailsBox.querySelector(".qty");
+    let qtyMsg = detailsBox.querySelector(".qty-msg");
     let allInput = payMode.querySelectorAll("input");
 
     //Check Delevery area
@@ -153,6 +155,7 @@ if (localStorage.getItem("__au__") != null) {
                     purchaseDate: new Date(),
                     productId: id,
                     status: "Order Placed",
+                    isCancel: false,
                 });
                 insertData("allOrderData", allOrderData);
                 insertData("allProductData", allProductData);
@@ -166,6 +169,31 @@ if (localStorage.getItem("__au__") != null) {
             swal("Select Payment Mode", "Select mode", "warining");
         }
 
+    }
+    //Check Product quatity
+    qtyEl.oninput = function () {
+        if (this.value > currentProduct.quantity) {
+            console.log(this.value)
+            swal("Out of stock", "Decrease quantity", "warning");
+            this.value = currentProduct.quantity;
+        }
+    }
+    if (currentProduct.quantity == 0) {
+        buyBtn.innerHTML = "Out of Stock"
+        buyBtn.className = "btn-danger btn"
+        buyBtn.disabled = true;
+    }
+    else if (currentProduct.quantity == 5) {
+        qtyMsg.innerHTML = `Left Only ${currentProduct.quantity}`;
+        qtyMsg.className = "text-success";
+    }
+    else if (currentProduct.quantity == 4) {
+        qtyMsg.innerHTML = `Left Only ${currentProduct.quantity}`;
+        qtyMsg.className = "text-success";
+    }
+    else if (currentProduct.quantity <= 3) {
+        qtyMsg.innerHTML = `Left Only ${currentProduct.quantity}`;
+        qtyMsg.className = "text-danger";
     }
 
 }

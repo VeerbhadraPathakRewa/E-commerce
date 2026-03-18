@@ -17,7 +17,7 @@ const formateDate = (dateStr) => {
     mm < 10 ? mm = "0" + mm : mm;
     let yy = date.getFullYear();
     return dd + "-" + mm + "-" + yy + " " + date.toLocaleTimeString();
-}
+};
 
 const showallOrder = (allData, element, username) => {
     let filterData = allData.filter((data) => data.userinfo.email == username)
@@ -42,8 +42,35 @@ const showallOrder = (allData, element, username) => {
         <td class="text-nowrap">
         <button class="btn btn-danger">${data.status}
         </button></td>
+        <td class="text-nowrap">
+        <button index="${index}" class="cancel-btn btn btn-primary ${data.isCancel ? "d-none" : ""}">Cancel
+        </button></td>
         
     </tr>
     `;
     });
-}
+    let allcancelBtn = element.querySelectorAll(".cancel-btn");
+    for (let btn of allcancelBtn) {
+        btn.onclick = async () => {
+            let allOrderData = getAllData("allOrderData")
+            let index = btn.getAttribute("index")
+            let currentProduct = filterData[index];
+            currentProduct["status"] = "Canceled";
+            currentProduct['isCancel'] = true;
+            let userId = currentProduct.userinfo.email;
+            let productId = currentProduct.productId;
+            let otp = currentProduct.otp;
+            let isConfirm = await confirm();
+            if (isConfirm) {
+
+                let currentIndex = allOrderData.findIndex((data) => {
+                    return data.userinfo.email == userId && data.productId == productId && data.otp == otp;
+
+                });
+                allOrderData[currentIndex] = currentProduct;
+                insertData("allOrderData", allOrderData);
+                swal("Oreder is Caceled", "Successfully", "success");
+            }
+        }
+    }
+};

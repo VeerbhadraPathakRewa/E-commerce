@@ -1408,15 +1408,17 @@ const showallOrder = () => {
         <button class="btn ${data.status == "Processing" ? "btn-primary" : "btn-danger"}">${data.status}
         </button></td>
         <td class="text-nowrap">
-        <button index="${index}" class="btn ${data.status == "Processing" ? "disabled" : "btn-primary"}  dispatch-btn">Dispatch
-        </button></td>
+        <button index="${index}" class="btn ${data.status == "Processing" ? "disabled" : "btn-primary"}  dispatch-btn">Dispatch</button>
+        <button index="${index}" class="btn btn-warning delete-btn  ${data.isCancel ? "" : "d-none"}">Delete</button>
+        
+        </td>
     </tr>
     
     `;
     })
     let allDispatchBtn = allOrderList.querySelectorAll(".dispatch-btn");
     for (btn of allDispatchBtn) {
-        btn.onclick =function () {
+        btn.onclick = function () {
             let index = this.getAttribute("index")
             let currentProdcut = allOrderData[index];
             currentProdcut["status"] = "Processing";
@@ -1427,10 +1429,25 @@ const showallOrder = () => {
             showallOrder();
         }
     }
+    //Delete cancel product coding
+    let allDelBtn = allOrderList.querySelectorAll(".delete-btn");
+    for (let btn of allDelBtn){
+        btn.onclick=async()=>{
+            let index= btn.getAttribute("index");
+           let isConfirm = await confirm();
+           if(isConfirm){
+            allOrderData.splice(index,1);
+            insertData("allOrderData",allOrderData);
+            swal("Product Deleted","Successfully","success");
+            showallOrder();
+           }
+
+        }
+    }
 }
 
 //Manage all Deliver Data codeing
-const allDeliverDataFunc=()=>{
+const allDeliverDataFunc = () => {
     showalldeliver();
 }
 const showalldeliver = () => {
@@ -1462,5 +1479,5 @@ const showalldeliver = () => {
     
     `;
     })
-   
+
 }
